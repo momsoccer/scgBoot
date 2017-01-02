@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.scg.persistence.CashPointMapper">
+
+       <insert id="saveHeaderPoint" parameterType="com.scg.model.CpBalanceHeader">
+              INSERT INTO cash_point_balance_header
+              (
+              uid,
+              amount,
+              updatedate)
+              VALUES
+              (
+              #{uid},
+              #{amount},
+              now()
+              );
+              <selectKey keyProperty="headerid" resultType="Integer" order="AFTER">
+                     SELECT LAST_INSERT_ID()
+              </selectKey>
+       </insert>
+
+       <insert id="saveLinePoint" parameterType="com.scg.model.CpBalanceLine">
+              INSERT INTO cash_point_balance_line
+              (
+              headerid,
+              type,
+              previous_amount,
+              in_amount,
+              out_amount,
+              last_amount,
+              description,
+              creationdate)
+              VALUES
+              (
+              #{headerid},
+              #{type},
+              #{previous_amount},
+              #{in_amount},
+              #{out_amount},
+              #{last_amount},
+              #{description},
+              now()
+              );
+              <selectKey keyProperty="lineid" resultType="Integer" order="AFTER">
+                     SELECT LAST_INSERT_ID()
+              </selectKey>
+       </insert>
+
+       <select id="getCpfPointAmount" resultType="com.scg.model.CpBalanceHeader">
+              select  headerid,
+              amount,
+              uid,
+              updatedate
+              from cash_point_balance_header
+              where uid=#{uid}
+       </select>
+
+</mapper>

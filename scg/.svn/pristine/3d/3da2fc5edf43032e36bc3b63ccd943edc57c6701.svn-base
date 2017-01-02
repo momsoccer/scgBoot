@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.scg.persistence.PointManageMapper">
+
+       <insert id="savePointManager" parameterType="com.scg.model.PointManagement">
+              INSERT INTO pointmanagement
+              (
+              typecode,
+              typedescription,
+              point,
+              lang,
+              enabled,
+              sign,
+              missionid,
+              getpoint,
+              escapepoint)
+              VALUES
+              (
+              #{typecode},
+              #{typedescription},
+              #{point},
+              #{lang},
+              #{enabled},
+              #{sign},
+              #{missionid},
+              #{getpoint},
+              #{escapepoint}
+              );
+       </insert>
+
+</mapper>

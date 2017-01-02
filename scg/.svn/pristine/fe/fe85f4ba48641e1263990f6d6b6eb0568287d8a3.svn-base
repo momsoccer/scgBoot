@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.scg.persistence.FcmTokenMapper">
+
+    <insert id="saveFcmToken" parameterType="com.scg.model.FcmToken">
+        INSERT INTO fcm_token
+        (
+        fcmtoken,
+        uid,
+        instructorid,
+        serialnumber,
+        creationdate,
+        updatedate
+        )
+        VALUES
+        (
+        #{fcmtoken},
+        #{uid},
+        #{instructorid},
+        #{serialnumber},
+        now(),
+        now()
+        );
+        <selectKey keyProperty="commontokenid" resultType="Integer" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+
+    <update id="updateFcmToken" parameterType="com.scg.model.FcmToken">
+        update fcm_token SET
+           fcmtoken = #{fcmtoken},
+           uid = #{uid},
+           updatedate = now()
+        where 1=1
+        and serialnumber = #{serialnumber}
+    </update>
+
+
+    <select id="getFcmTokenList"  parameterType="com.scg.model.FcmToken" resultType="com.scg.model.FcmToken">
+        select *
+        from fcm_token ft
+        where 1=1
+        <if test="uid != 0">
+            and ft.uid = #{uid}
+        </if>
+        <if test="instructorid != 0">
+            and ft.instructorid = #{instructorid}
+        </if>
+        <if test="serialnumber != null">
+            and serialnumber = #{serialnumber}
+        </if>
+    </select>
+
+    <select id="getFcmTokenCount"  parameterType="com.scg.model.FcmToken" resultType="int">
+        select count(*)
+        from fcm_token ft
+        where 1=1
+        <if test="uid != 0">
+            and ft.uid = #{uid}
+        </if>
+        <if test="instructorid != 0">
+            and ft.instructorid = #{instructorid}
+        </if>
+        <if test="fcmtoken != null">
+            and ft.fcmtoken = #{fcmtoken}
+        </if>
+        <if test="serialnumber != null">
+            and serialnumber = #{serialnumber}
+        </if>
+    </select>
+
+    <select id="getFcmToken"  parameterType="com.scg.model.FcmToken" resultType="com.scg.model.FcmToken">
+        select *
+        from fcm_token ft
+        where 1=1
+        <if test="uid != 0">
+            and ft.uid = #{uid}
+        </if>
+        <if test="instructorid != 0">
+            and ft.instructorid = #{instructorid}
+        </if>
+        <if test="fcmtoken != null">
+            and ft.fcmtoken = #{fcmtoken}
+        </if>
+        <if test="serialnumber != null">
+            and serialnumber = #{serialnumber}
+        </if>
+        LIMIT 1
+    </select>
+
+    <delete id="deleteFcmToken" parameterType="com.scg.model.FcmToken">
+      DELETE
+      from fcm_token
+      where uid = #{uid}
+        <if test="serialnumber != null">
+            and serialnumber = #{serialnumber}
+        </if>
+        <if test="fcmtoken != null">
+            and fcmtoken = #{fcmtoken}
+        </if>
+    </delete>
+
+    <select id="getFcmTokenCompare"  parameterType="com.scg.model.FcmToken" resultType="com.scg.model.FcmToken">
+        select *
+        from fcm_token ft
+        where 1=1
+        and ft.uid = #{uid}
+        and ft.instructorid = #{instructorid}
+        <if test="serialnumber != null">
+            and serialnumber = #{serialnumber}
+        </if>
+        LIMIT 1
+    </select>
+
+</mapper>

@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.scg.persistence.InstructorMapper">
+
+    <insert id="saveInstructor" parameterType="com.scg.model.Instructor">
+        INSERT INTO instructor
+        (
+        email,
+        name,
+        profileimgurl,
+        password,
+        profile,
+        description,
+        phone,
+        location,
+        pointhistoryid,
+        feedbackflag,
+        apppushflag,
+        creationdate,
+        uid,
+        commontokenid
+        )
+        values
+        (
+        #{email},
+        #{name},
+        #{profileimgurl},
+        #{password},
+        #{profile},
+        #{description},
+        #{phone},
+        #{location},
+        #{pointhistoryid},
+        #{feedbackflag},
+        #{apppushflag},
+        now(),
+        #{uid},
+        #{commontokenid}
+        )
+        <selectKey keyProperty="instructorid" resultType="Integer" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+
+    <update id="updateInstructor" parameterType="com.scg.model.Instructor">
+        update instructor
+        <set>
+            <if test="name != null">name = #{name},</if>
+            <if test="profileimgurl != null">profileimgurl = #{profileimgurl},</if>
+            <if test="profile != null">profile = #{profile},</if>
+            <if test="description != null">description = #{description},</if>
+            <if test="phone != null">phone = #{phone},</if>
+            <if test="location != 0">location = #{location},</if>
+            <if test="pointhistoryid != 0">pointhistoryid = #{pointhistoryid},</if>
+            <if test="feedbackflag != null">feedbackflag = #{feedbackflag},</if>
+            <if test="apppushflag != null">apppushflag = #{apppushflag},</if>
+            <if test="commontokenid != 0">commontokenid = #{commontokenid}</if>
+        </set>
+        where 1=1
+        <if test="instructorid != 0">
+            and   instructorid = #{instructorid}
+        </if>
+        <if test="uid != 0">
+            and   uid = #{uid}
+        </if>
+        <if test="email != null">
+            and   email = #{email}
+        </if>
+    </update>
+
+    <select id="getInstrutor" parameterType="com.scg.model.Instructor" resultType="com.scg.model.Instructor">
+        select  t.name as teamname,
+                t.teamid,
+                (
+                select count(*)
+                from teammember tm
+                where tm.teamid = t.teamid
+                and tm.authority='MEMBER'
+                ) as membercount,
+                itc.*
+        from instructor itc,
+             team t
+        where itc.instructorid = t.instructorid
+        <if test="instructorid != 0">
+            and itc.instructorid = #{instructorid}
+        </if>
+        <if test="email != null ">
+            and itc.email = #{email}
+        </if>
+        <if test="name != null">
+            and itc.name like CONCAT('%',#{name},'%')
+        </if>
+        <if test="feedbackflag != null">
+            and itc.feedbackflag = #{feedbackflag}
+        </if>
+        <if test="apppushflag != null">
+            and itc.apppushflag = #{apppushflag}
+        </if>
+        <if test="uid != 0">
+            and   uid = #{uid}
+        </if>
+        LIMIT 1
+    </select>
+
+    <select id="getInstrutorList" parameterType="com.scg.model.Instructor" resultType="com.scg.model.Instructor">
+        select *
+        from instructor itc
+        where 1=1
+        <if test="instructorid != 0">
+            and itc.instructorid = #{instructorid}
+        </if>
+        <if test="email != null ">
+            and itc.email = #{email}
+        </if>
+        <if test="name != null">
+            and itc.name like CONCAT('%',#{name},'%')
+        </if>
+        <if test="feedbackflag != null">
+            and itc.feedbackflag = #{feedbackflag}
+        </if>
+        <if test="apppushflag != null">
+            and itc.apppushflag = #{apppushflag}
+        </if>
+        <if test="uid != 0">
+            and   uid = #{uid}
+        </if>
+    </select>
+
+    <select id="getFindIns" parameterType="int" resultType="com.scg.model.Instructor">
+        select itc.*,
+               (select serialnumber from fcm_token where commontokenid = itc.commontokenid) as serialnumber,
+               (select fcmtoken from fcm_token where commontokenid = itc.commontokenid) as fcmtoken,
+               t.name as teamname,
+               t.emblem,
+               t.creationdate as teamcreationdate,
+               t.teamid
+        from  instructor itc,
+              team t
+        where 1=1
+        and   itc.instructorid = t.instructorid
+        and   itc.uid = #{param1}
+        LIMIT 1
+    </select>
+
+    <select id="getCoachSearchList" parameterType="com.scg.model.Instructor" resultType="com.scg.model.Instructor">
+        select itc.*,
+        (select serialnumber from fcm_token where commontokenid = itc.commontokenid) as serialnumber,
+        (select fcmtoken from fcm_token where commontokenid = itc.commontokenid) as fcmtoken,
+        t.name as teamname,
+        t.emblem,
+        t.creationdate as teamcreationdate
+        from  instructor itc,
+        team t
+        where itc.instructorid = t.instructorid
+        and   itc.uid not in (#{uid})
+        <if test="name != null">
+            and itc.name like CONCAT('%',#{name},'%')
+        </if>
+        <if test="queryRow != 0">
+            LIMIT #{queryRow}
+        </if>
+
+    </select>
+
+    <select id="getInsInfoApply" parameterType="int" resultType="com.scg.ins.vo.InsInfoVo">
+          select   t.teamid,
+                   t.instructorid,
+                   ins.name,
+                   ins.profileimgurl,
+                   t.name as teamname,
+                   t.emblem,
+                   iap.age,
+                   iap.playeryear,
+                   iap.instructoryear,
+                   iap.address,
+                   iap.currentteamname,
+                   iap.career1,
+                   iap.career2,
+                   iap.career3,
+                   iap.career4,
+                   iap.career5,
+                   iap.resume,
+                   iap.email,
+                   iph.teamvideopoint,
+                   iph.teamwordpoint,
+                   iph.pubvideopoint,
+                   iph.pubwordpoint,
+                   iph.teamjoinpoint,
+                   iph.teampasspoint,
+                   iph.pubpasspoint,
+                   (
+                   select count(*)
+                   from feedback_header h
+                   where h.instructorid = ins.instructorid
+                   ) as questioncount,
+                   (
+				   select count(*)
+                    from  feedback_header h,
+                          feedback_line l
+                    where h.feedbackid = l.feedbackid
+                    and l.type='ins'
+                    and h.instructorid = ins.instructorid
+                   ) as answercount,
+                   (
+                    select avg(l.evalscore)
+                    from  feedback_header h,
+                          feedback_line l
+                    where h.feedbackid = l.feedbackid
+                    and h.instructorid = ins.instructorid
+                    and l.type='ins'
+                    group by instructorid
+                   )  as estimation,
+                   0 as insvidecount,
+                   (
+                   select count(*)
+                   from teammember tm
+                   where tm.teamid=t.teamid
+                   and   tm.authority!='OWNER'
+                   )   as teammembercount,
+                   t.creationdate as change_teamcreationdate,
+                   t.teamid,
+                   ins.uid
+        from instructor ins,
+             instructor_apply iap,
+             team t,
+             instructor_point_history iph
+        where ins.instructorid = iap.instructorid
+        and   ins.instructorid = t.instructorid
+        and   ins.instructorid = iph.instructorid
+        and   ins.instructorid = #{param1}
+    </select>
+
+
+</mapper>

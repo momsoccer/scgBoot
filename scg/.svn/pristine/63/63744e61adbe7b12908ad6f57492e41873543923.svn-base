@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.scg.persistence.FriendApplyMapper">
+    <select id="getAllfriend" parameterType="com.scg.datadto.FeedDataVo" resultType="com.scg.datadto.FeedDataVo">
+        select sum(completecount) as  completecount,
+               sum(incompletecount) as  incompletecount
+        from (
+        select count(*) as  completecount,
+        0 as incompletecount
+        from user_friend_apply
+        where flag='ACCEPT'
+        and requid = #{uid}
+        union all
+        select count(*) completecount,
+        0 as incompletecount
+        from user_friend_apply
+        where flag='ACCEPT'
+        and resuid = #{uid}
+        union all
+        select  0 as completecount,
+                count(*) as  incompletecount
+        from user_friend_apply a
+        where flag='REQUEST'
+        and resuid = #{uid}
+        ) temptable
+    </select>
+
+    <insert id="reqFriendApply" parameterType="com.scg.model.userfriend.FriendApply">
+              INSERT INTO user_friend_apply
+              (
+              requid,
+              resuid,
+              flag,
+              requestmessage,
+              creationdate,
+              updatedate
+              )
+              VALUES
+              (
+              #{requid},
+              #{resuid},
+              #{flag},
+              #{requestmessage},
+              now(),
+              now()
+              );
+
+              <selectKey keyProperty="applyid" resultType="Integer" order="AFTER">
+                     SELECT LAST_INSERT_ID()
+              </selectKey>
+       </insert>
+
+       <select id="getFriendReqList" resultType="com.scg.model.userfriend.FriendReqVo">
+              select f.applyid,
+                     u.username,
+                     u.profileimgurl,
+                     u.uid,
+                     (
+                     select t.name
+                     from team t,
+                     teammember tm
+                     where t.teamid = tm.teamid
+                     and tm.uid = u.uid
+                     ) as teamname,
+                     (
+                     select count(*)
+                     from usermission um
+                     where um.uid= u.uid
+                     ) as usermissioncount,
+                     (
+                     select sum(grade +
+
+           case when um.passflag='Y' then
+           um.passgrade
+           else
+           0 end
+
+           )
+                     from usermission um
+                     where um.uid= u.uid
+                     ) as score,
+                     (
+                     select count(*)
+                     from followmanage fw
+                     where fw.followuid = u.uid
+                     ) as followercount,
+                     (
+                     select count(*)
+                     from followmanage fw
+                     where fw.uid = u.uid
+                     ) as followingcount,
+                     (
+                     select count(*)
+                     from board bd
+                     where bd.writeuid = u.uid
+                     ) as mecommentcount,
+                     (
+                     select count(*)
+                     from board bd
+                     where bd.uid = u.uid
+                     ) as commentcount,
+                     f.creationdate,
+                     f.flag
+              from user_friend_apply f,
+              user u
+              where 1=1
+              and  f.flag = #{param2}
+              and  f.requid = u.uid
+              and  f.resuid = #{param1}
+              <if test="param2 == 'ACCEPT' ">
+              union ALL
+                  select f.applyid,
+                  u.username,
+                  u.profileimgurl,
+                  u.uid,
+                  (
+                  select t.name
+                  from team t,
+                  teammember tm
+                  where t.teamid = tm.teamid
+                  and tm.uid = u.uid
+                  ) as teamname,
+                  (
+                  select count(*)
+                  from usermission um
+                  where um.uid= u.uid
+                  ) as usermissioncount,
+                  (
+                  select sum(grade +
+
+                  case when um.passflag='Y' then
+                  um.passgrade
+                  else
+                  0 end
+
+                  )
+                  from usermission um
+                  where um.uid= u.uid
+                  ) as score,
+                  (
+                  select count(*)
+                  from followmanage fw
+                  where fw.followuid = u.uid
+                  ) as followercount,
+                  (
+                  select count(*)
+                  from followmanage fw
+                  where fw.uid = u.uid
+                  ) as followingcount,
+                  (
+                  select count(*)
+                  from board bd
+                  where bd.writeuid = u.uid
+                  ) as mecommentcount,
+                  (
+                  select count(*)
+                  from board bd
+                  where bd.uid = u.uid
+                  ) as commentcount,
+                  f.creationdate,
+                  f.flag
+                  from user_friend_apply f,
+                  user u
+                  where 1=1
+                  and  f.flag = #{param2}
+                  and  f.resuid = u.uid
+                  and  f.requid = #{param1}
+              </if>
+       </select>
+
+       <update id="updateFriendFlag" parameterType="com.scg.model.userfriend.FriendApply">
+              update user_friend_apply set
+                  flag = #{flag},
+                  updatedate = now()
+              where 1=1
+              and requid = #{requid}
+              and resuid = #{resuid}
+       </update>
+
+       <select id="getFriendApply" parameterType="com.scg.model.userfriend.FriendApply" resultType="com.scg.model.userfriend.FriendApply">
+              select *
+              from user_friend_apply
+              where 1=1
+              <if test="requid != 0">
+                     and requid = #{requid}
+              </if>
+              <if test="resuid != 0">
+                     and resuid = #{resuid}
+              </if>
+
+       </select>
+
+       <delete id="deleteFriend" parameterType="com.scg.model.userfriend.FriendApply">
+              DELETE from user_friend_apply
+              where 1=1
+              <if test="requid != 0">
+                     and requid = #{requid}
+              </if>
+              <if test="resuid != 0">
+                     and resuid = #{resuid}
+              </if>
+       </delete>
+
+       <update id="friendupdate" parameterType="com.scg.model.userfriend.FriendApply">
+             update user_friend_apply
+                  flag = #{param2},
+                  updatedate = now()
+              where 1=1
+              <if test="requid != 0">
+                     and requid = #{requid}
+              </if>
+              <if test="resuid != 0">
+                     and resuid = #{resuid}
+              </if>
+       </update>
+
+</mapper>

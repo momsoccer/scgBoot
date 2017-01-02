@@ -1,0 +1,385 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.scg.persistence.TeamMapper">
+
+       <select id="getTeamNameList" resultType="String">
+              select 'ALL' as name
+              from dual
+              union all
+              select name
+              from team
+       </select>
+
+       <select id="getMyTeaminfo" parameterType="int" resultType="com.scg.model.Team">
+              select t.*
+              from team t,
+                   teammember tm
+              where t.teamid = tm.teamid
+              and tm.uid=#{param1}
+       </select>
+
+
+       <select id="getReqMember" resultType="com.scg.model.TeamApply">
+              select ta.applyid,
+                     ta.instructorid,
+                     ta.uid,
+                     u.username,
+                     t.teamid,
+                     u.profileimgurl as userimge,
+                     ta.approval,
+                     (
+                      select sum(sumi.grade +
+
+                                    case when sumi.passflag='Y' then
+              sumi.passgrade
+              else
+              0 end
+
+                      )
+                      from usermission sumi
+                      where sumi.uid = u.uid
+                      ) as totalscore,
+                      ta.creationdate
+              from team_apply ta,
+                   team t,
+                   user u
+              where 1=1
+              and ta.teamid = t.teamid
+              and ta.uid = u.uid
+              and t.instructorid = #{param1}
+              and ta.approval= #{param2}
+       </select>
+
+
+       <insert id="teamSave" parameterType="com.scg.model.Team">
+              INSERT INTO team
+              (
+              instructorid,
+              name,
+              emblem,
+              description,
+              enabled,
+              approveflag,
+              creationdate,
+              updatedate
+              )
+              VALUES
+              (
+              #{instructorid},
+              #{name},
+              #{emblem},
+              #{description},
+              #{enabled},
+              #{approveflag},
+              now(),
+              now()
+              );
+              <selectKey keyProperty="teamid" resultType="Integer" order="AFTER">
+                     SELECT LAST_INSERT_ID()
+              </selectKey>
+       </insert>
+
+       <update id="teamUpdate" parameterType="com.scg.model.Team">
+              update team
+              <set>
+                     <if test="name != null">
+                            name = #{name},
+                     </if>
+                     <if test="emblem != null">
+                            emblem = #{emblem},
+                     </if>
+                     <if test="description != null">
+                            description = #{description},
+                     </if>
+                     <if test="approveflag != null">
+                            approveflag = #{approveflag},
+                     </if>
+                     updatedate = now()
+              </set>
+              where 1=1
+              <if test="teamid != 0">
+              and teamid = #{teamid}
+              </if>
+              <if test="instructorid != 0">
+                     and instructorid = #{instructorid}
+              </if>
+       </update>
+
+       <select id="getTeamList" parameterType="com.scg.model.Team" resultType="com.scg.model.Team">
+              select tm.*,
+                     ir.name as instructorname
+              from team tm,
+                   instructor ir
+              where tm.instructorid = ir.instructorid
+              <if test="teamid != 0">
+                     and tm.teamid = #{teamid}
+              </if>
+              <if test="instructorid != 0">
+                     and tm.instructorid = #{instructorid}
+              </if>
+              <if test="name != null">
+                     and tm.name like CONCAT('%',#{name},'%')
+              </if>
+              <if test="enabled != null">
+                     and tm.enabled =#{enabled}
+              </if>
+       </select>
+
+       <select id="getTeam" parameterType="com.scg.model.Team" resultType="com.scg.model.Team">
+              select tm.*,
+                     ir.name as instructorname
+              from team tm,
+                   instructor ir
+              where tm.instructorid = ir.instructorid
+              <if test="teamid != 0">
+                     and tm.teamid = #{teamid}
+              </if>
+              <if test="instructorid != 0">
+                     and tm.instructorid = #{instructorid}
+              </if>
+              <if test="name != null">
+                     and tm.name like CONCAT('%',#{name},'%')
+              </if>
+              <if test="enabled != null">
+                     and tm.enabled =#{enabled}
+              </if>
+              LIMIT 1
+       </select>
+
+       <insert id="teamApplySave" parameterType="com.scg.model.TeamApply">
+              INSERT INTO team_apply
+              (
+              teamid,
+              instructorid,
+              uid,
+              description,
+              approval,
+              enabled,
+              creationdate,
+              updatedate
+              )
+              VALUES
+              (
+              #{teamid},
+              #{instructorid},
+              #{uid},
+              #{description},
+              #{approval},
+              #{enabled},
+              now(),
+              now()
+              );
+              <selectKey keyProperty="applyid" resultType="Integer" order="AFTER">
+                     SELECT LAST_INSERT_ID()
+              </selectKey>
+       </insert>
+
+       <update id="teamApplyUpdate" parameterType="com.scg.model.TeamApply">
+              update team_apply
+              <set>
+                     <if test="description != null">description = #{description},</if>
+                     <if test="approval != null">approval = #{approval},</if>
+                     <if test="enabled != null">enabled = #{enabled},</if>
+                     <if test="reply != null">reply = #{reply},</if>
+                     updatedate = now()
+              </set>
+              where applyid = #{applyid}
+       </update>
+
+       <select id="getTeamApplyList" parameterType="com.scg.model.TeamApply" resultType="com.scg.model.TeamApply">
+              select ta.*,
+                     u.username,
+              (select name
+              from team t
+              where t.teamid = ta.teamid) as teamname
+              from user u,
+                   team_apply ta
+              where u.uid = ta.uid
+              <if test="applyid != 0">
+                     and ta.applyid = #{applyid}
+              </if>
+              <if test="teamid != 0">
+                     and ta.teamid = #{teamid}
+              </if>
+              <if test="instructorid != 0">
+                     and ta.instructorid = #{instructorid}
+              </if>
+              <if test="uid != 0">
+                     and ta.uid = #{uid}
+              </if>
+              <if test="approval != null">
+                     and ta.approval = #{approval}
+              </if>
+              <if test="enabled != null">
+                     and ta.enabled = #{enabled}
+              </if>
+       </select>
+
+       <select id="getTeamApplyCount" parameterType="com.scg.model.TeamApply" resultType="int">
+              select count(*)
+              from team_apply ta
+              where 1=1
+              <if test="applyid != 0">
+                     and ta.applyid = #{applyid}
+              </if>
+              <if test="teamid != 0">
+                     and ta.teamid = #{teamid}
+              </if>
+              <if test="instructorid != 0">
+                     and ta.instructorid = #{instructorid}
+              </if>
+              <if test="uid != 0">
+                     and ta.uid = #{uid}
+              </if>
+              <if test="approval != null">
+                     and ta.approval = #{approval}
+              </if>
+              <if test="enabled != null">
+                     and ta.enabled = #{enabled}
+              </if>
+              LIMIT 1
+       </select>
+
+       <delete id="deleteTeamApply" parameterType="com.scg.model.TeamApply">
+              delete from team_apply
+              where 1=1
+              <if test=" applyid != 0">
+                     and applyid = #{applyid}
+              </if>
+              <if test=" uid != 0">
+              and uid = #{uid}
+              </if>
+              <if test="instructorid != 0">
+              and instructorid = #{instructorid}
+              </if>
+
+       </delete>
+
+       <select id="getTeamApply" parameterType="com.scg.model.TeamApply" resultType="com.scg.model.TeamApply">
+              select ta.*, u.username,
+              (select name
+              from team t
+              where t.teamid = ta.teamid) as teamname
+              from user u,
+                        team_apply ta
+              where u.uid = ta.uid
+              <if test="applyid != 0">
+                     and ta.applyid = #{applyid}
+              </if>
+              <if test="teamid != 0">
+                     and ta.teamid = #{teamid}
+              </if>
+              <if test="instructorid != 0">
+                     and ta.instructorid = #{instructorid}
+              </if>
+              <if test="uid != 0">
+                     and ta.uid = #{uid}
+              </if>
+              <if test="approval != null">
+                     and ta.approval = #{approval}
+              </if>
+              <if test="enabled != null">
+                     and ta.enabled = #{enabled}
+              </if>
+              LIMIT 1
+       </select>
+
+       <!--팀멤버관련 SQL-->
+       <insert id="saveTeamMember" parameterType="com.scg.model.TeamMember">
+              INSERT INTO teammember
+              (
+              teamid,
+              uid,
+              enabled,
+              authority,
+              creationdate,
+              updatedate)
+              VALUES
+              (
+              #{teamid},
+              #{uid},
+              #{enabled},
+              #{authority},
+              now(),
+              now()
+              );
+       </insert>
+
+       <update id="updateTeamMember" parameterType="com.scg.model.TeamMember">
+              update teammember
+              <set>
+                     <if test="enabled != null">enabled = #{enabled}</if>
+                     updatedate = now()
+              </set>
+              where 1=1
+              <if test="teammemberId != 0">
+                     and   teammemberId = #{teammemberId}
+              </if>
+              <if test="uid != 0">
+                     and   uid = #{uid}
+              </if>
+       </update>
+
+       <select id="getTeamMemeberList" parameterType="com.scg.model.TeamMember" resultType="com.scg.model.TeamMember">
+              select te.name as teamname,
+
+                     u.username,
+                     me.*
+              from team te,
+                   teammember me,
+                   user u
+              where te.teamid = me.teamid
+              and u.uid = me.uid
+              <if test="teamid != 0">
+                     and   me.teamid = #{teamid}
+              </if>
+              <if test="uid != 0">
+                     and   me.uid = #{uid}
+              </if>
+              <if test="enabled != null">
+                     and   me.enabled = #{enabled}
+              </if>
+       </select>
+
+       <select id="getTeamMemeber" parameterType="com.scg.model.TeamMember" resultType="com.scg.model.TeamMember">
+              select te.name as teamname,
+              u.username,
+              me.*
+              from team te,
+                   teammember me,
+                   user u
+              where te.teamid = me.teamid
+              and u.uid = me.uid
+              <if test="teamid != 0">
+                     and   me.teamid = #{teamid}
+              </if>
+              <if test="uid != 0">
+                     and   me.uid = #{uid}
+              </if>
+              <if test="enabled != null">
+                     and   me.enabled = #{enabled}
+              </if>
+       </select>
+
+       <delete id="deleteTeamMember" parameterType="int">
+              delete from teammember where teamid = #{param1} and uid = #{param2}
+       </delete>
+
+       <select id="getTeamCount" resultType="com.scg.datadto.FeedDataVo" parameterType="int">
+          select  sum(completecount) as completecount,
+                  sum(incompletecount) as incompletecount
+              from (
+              select count(*) as completecount,
+                     0 as incompletecount
+              from team_apply
+              where instructorid = #{param1}
+              and approval='APPROVAL'
+              union all
+              select  0 as completecount,
+                      count(*) as incompletecount
+              from team_apply
+              where instructorid = #{param1}
+              and approval != 'APPROVAL'
+              ) team_table
+       </select>
+</mapper>

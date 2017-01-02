@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.scg.persistence.RankingMapper">
+
+    <select id="getUserRankingAll" parameterType="com.scg.datadto.UserRangkinVo" resultType="com.scg.datadto.UserRangkinVo">
+        select    u.uid,
+        u.username,
+        u.profileimgurl,
+        (
+        select t.name
+        from team t,
+        teammember tm
+        where t.teamid = tm.teamid
+        and  tm.uid= u.uid
+        ) teamname,
+        sum(umi.grade +
+        case when umi.passflag='Y' then
+        umi.passgrade else 0 end
+        ) as totalscore
+        from usermission umi,
+        user u
+        where u.uid = umi.uid
+        group by u.uid,u.username,u.profileimgurl
+        <trim prefix="ORDER BY">
+            <if test="orderbytype == 'totalscore' ">
+                totalscore desc LIMIT #{limit} offset #{offset}
+            </if>
+        </trim>
+
+    </select>
+
+    <select id="getTeamRanking" parameterType="com.scg.datadto.UserRangkinVo" resultType="com.scg.datadto.UserRangkinVo">
+        select
+		    t.name as teamname,
+            u.uid,
+			u.username,
+			u.profileimgurl,
+           sum(umi.grade +
+
+        case when umi.passflag='Y' then
+        umi.passgrade else 0 end
+
+        ) as totalscore
+        from usermission umi,
+             user u,
+             teammember tm,
+             team t
+        where u.uid = umi.uid
+        and   u.uid = tm.uid
+        and   tm.teamid = t.teamid
+        and   t.teamid = (
+                          select stm.teamid
+                          from teammember stm
+                          where stm.uid = #{uid}
+                         )
+        group by u.uid,u.username,u.profileimgurl,t.teamid,t.name
+        <trim prefix="ORDER BY">
+            <if test="orderbytype == 'totalscore' ">
+                totalscore desc
+            </if>
+        </trim>
+        LIMIT #{queryRow}
+    </select>
+
+    <select id="getFriendRanking" parameterType="com.scg.datadto.UserRangkinVo" resultType="com.scg.datadto.UserRangkinVo">
+        select u.uid,
+        u.username,
+        u.profileimgurl,
+        sum(umi.grade +
+
+        case when umi.passflag='Y' then
+        umi.passgrade else 0 end
+
+        ) as totalscore,
+        (
+        select t.name
+        from team t,
+        teammember tm
+        where t.teamid = tm.teamid
+        and tm.uid = u.uid
+        ) as teamname
+        from usermission umi,
+        user u,
+        (
+        select resuid as uid
+        from user_friend_apply
+        where flag='ACCEPT'
+        and  requid=#{uid}
+        union all
+        select requid as uid
+        from user_friend_apply
+        where flag='ACCEPT'
+        and  resuid=#{uid}
+        union all
+        select uid
+        from user where uid = #{uid}
+        ) fr
+        where u.uid = umi.uid
+        and   u.uid = fr.uid
+        group by u.uid,u.username,u.profileimgurl
+        <trim prefix="ORDER BY">
+            <if test="orderbytype == 'totalscore' ">
+                totalscore desc
+            </if>
+        </trim>
+        LIMIT #{queryRow}
+    </select>
+
+
+
+
+</mapper>

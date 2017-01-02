@@ -1,0 +1,433 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.scg.persistence.MomBoardMapper">
+
+       <update id="updateBoardHeader" parameterType="com.scg.model.MomBoard">
+              update board_header set
+              <if test="content != null">
+                     content = #{content},
+              </if>
+              <if test="boardtypeid != 0">
+                     boardtypeid = #{boardtypeid},
+              </if>
+              <if test="boardtype != null">
+                     boardtype = #{boardtype},
+              </if>
+              <if test="pubtype != null">
+                     pubtype = #{pubtype},
+              </if>
+              <if test="category != null">
+                     category = #{category},
+              </if>
+              updatedate = now()
+              where boardid = #{boardid}
+       </update>
+
+       <select id="getAllBoardLineList" parameterType="com.scg.model.MomBoard" resultType="com.scg.model.MomBoard">
+              select bh.*,
+              (select count(*)
+              from board_file f
+              where f.boardid = bh.boardid) as filecount,
+              u.username,
+              u.profileimgurl as userimg,
+              (
+              select t.name
+              from team t,
+              teammember tm
+              where t.teamid = tm.teamid
+              and   tm.uid= u.uid
+              ) teamname,
+              (
+              select t.teamid
+              from team t,
+              teammember tm
+              where t.teamid = tm.teamid
+              and   tm.uid= u.uid
+              ) teamid,
+              (
+              select sum(um.grade +
+
+              case when um.passflag='Y' then
+              um.passgrade
+              else
+              0 end
+
+              )
+              from usermission um
+              where um.uid = u.uid
+              ) as totalscore,
+              (
+              select count(*)
+              from board_line li
+              where li.boardid = bh.boardid
+              ) as commentcount
+              from user u,
+              board_header bh
+              where u.uid=bh.uid
+              <if test="boardtype != null ">
+                     and boardtype = #{boardtype}
+              </if>
+              <if test="boardid !=0 ">
+                     and boardid = #{boardid}
+              </if>
+              <if test="boardtypeid !=0 ">
+                     and boardtypeid = #{boardtypeid}
+              </if>
+              <if test="category != null">
+                     and category = #{category}
+              </if>
+              order by category,boardid desc limit #{limit} offset #{offset}
+       </select>
+
+       <select id="getBoardHeader" parameterType="com.scg.model.MomBoard" resultType="com.scg.model.MomBoard">
+              select bh.*,
+              (select count(*)
+              from board_file f
+              where f.boardid = bh.boardid) as filecount,
+              u.username,
+              u.profileimgurl as userimg,
+              (
+              select t.name
+              from team t,
+              teammember tm
+              where t.teamid = tm.teamid
+              and   tm.uid= u.uid
+              ) teamname,
+              (
+              select t.teamid
+              from team t,
+              teammember tm
+              where t.teamid = tm.teamid
+              and   tm.uid= u.uid
+              ) teamid,
+              (
+              select sum(um.grade +
+
+              case when um.passflag='Y' then
+              um.passgrade
+              else
+              0 end
+
+              )
+              from usermission um
+              where um.uid = u.uid
+              ) as totalscore,
+              (
+              select count(*)
+              from board_line li
+              where li.boardid = bh.boardid
+              ) as commentcount
+              from user u,
+                   board_header bh
+              where u.uid=bh.uid
+              <if test="boardid !=0 ">
+                     and boardid = #{boardid}
+              </if>
+              <if test="boardtypeid !=0 ">
+                     and boardtypeid = #{boardtypeid}
+              </if>
+              <if test="category != null">
+                     and category = #{category}
+              </if>
+       </select>
+
+       <select id="getBoardHeaderList" parameterType="com.scg.model.MomBoard" resultType="com.scg.model.MomBoard">
+              select *
+              from (
+              select
+              (select count(*)
+              from board_file f
+              where f.boardid = bh.boardid) as filecount,
+              bh.*,
+              u.username,
+              u.profileimgurl as userimg,
+              (
+              select t.name
+              from team t,
+              teammember tm
+              where t.teamid = tm.teamid
+              and   tm.uid= u.uid
+              ) teamname,
+              (
+              select t.teamid
+              from team t,
+              teammember tm
+              where t.teamid = tm.teamid
+              and   tm.uid= u.uid
+              ) teamid,
+              (
+              select sum(um.grade +
+
+              case when um.passflag='Y' then
+              um.passgrade
+              else
+              0 end
+
+              )
+              from usermission um
+              where um.uid = u.uid
+              ) as totalscore,
+              (
+              select count(*)
+              from board_line li
+              where li.boardid = bh.boardid
+              ) as commentcount
+              from user u,
+              board_header bh
+              where u.uid=bh.uid
+              and bh.category='A'
+              union all
+              select
+              (select count(*)
+              from board_file f
+              where f.boardid = bh.boardid) as filecount,
+              bh.*,
+              u.username,
+              u.profileimgurl as userimg,
+              (
+              select t.name
+              from team t,
+              teammember tm
+              where t.teamid = tm.teamid
+              and   tm.uid= u.uid
+              ) teamname,
+              (
+              select t.teamid
+              from team t,
+              teammember tm
+              where t.teamid = tm.teamid
+              and   tm.uid= u.uid
+              ) teamid,
+              (
+              select sum(um.grade +
+
+              case when um.passflag='Y' then
+              um.passgrade
+              else
+              0 end
+
+              )
+              from usermission um
+              where um.uid = u.uid
+              ) as totalscore,
+              (
+              select count(*)
+              from board_line li
+              where li.boardid = bh.boardid
+              ) as commentcount
+              from user u,
+              board_header bh
+              where u.uid=bh.uid
+              and bh.category='B'
+              ) temp_table
+              where 1=1
+              <if test="boardtypeid !=0 ">
+               and boardtypeid = #{boardtypeid}
+              </if>
+              order by category,boardid desc limit #{limit} offset #{offset}
+       </select>
+
+       <insert id="saveBoardheader" parameterType="com.scg.model.MomBoard">
+              INSERT INTO board_header
+              (
+              uid,
+              boardtype,
+              subject,
+              content,
+              boardtypeid,
+              pubtype,
+              creationdate,
+              category,
+              updatedate
+              )
+              VALUES
+              (
+              #{uid},
+              #{boardtype},
+              #{subject},
+              #{content},
+              #{boardtypeid},
+              #{pubtype},
+              now(),
+              #{category},
+              now()
+              )
+
+              <selectKey keyProperty="boardid" resultType="Integer" order="AFTER">
+                     SELECT LAST_INSERT_ID()
+              </selectKey>
+
+       </insert>
+
+       <delete id="deleteBoardheader" parameterType="com.scg.model.MomBoard">
+              DELETE from board_header
+              where 1=1
+              <if test="boardid != 0 ">
+                     and boardid = #{boardid}
+              </if>
+              <if test="uid != 0 ">
+                     and uid = #{uid}
+              </if>
+       </delete>
+
+       <select id="getBoardLineList" parameterType="com.scg.model.MomBoard" resultType="com.scg.model.MomBoard">
+              select bl.*,
+              u.username,
+              u.profileimgurl as userimg,
+              (
+              select t.name
+              from team t,
+              teammember tm
+              where t.teamid = tm.teamid
+              and   tm.uid= u.uid
+              ) teamname,
+              (
+              select t.teamid
+              from team t,
+              teammember tm
+              where t.teamid = tm.teamid
+              and   tm.uid= u.uid
+              ) teamid,
+              (
+              select sum(um.grade +
+
+              case when um.passflag='Y' then
+              um.passgrade
+              else
+              0 end
+
+              )
+              from usermission um
+              where um.uid = u.uid
+              ) as totalscore
+              from user u,
+              board_line bl
+              where u.uid = bl.uid
+              <if test="lineid != 0 ">
+                     and lineid = #{lineid}
+              </if>
+              <if test="boardid != 0 ">
+                     and boardid = #{boardid}
+              </if>
+              <if test="uid != 0 ">
+                     and uid = #{uid}
+              </if>
+       </select>
+
+       <select id="getBoardLineCount" parameterType="com.scg.model.MomBoard" resultType="int">
+              select count(*)
+              from board_line
+              where 1=1
+              <if test="lineid != 0 ">
+                     and lineid = #{lineid}
+              </if>
+              <if test="boardid != 0 ">
+                     and boardid = #{boardid}
+              </if>
+              <if test="uid != 0 ">
+                     and uid = #{uid}
+              </if>
+       </select>
+
+       <insert id="saveBoardLine" parameterType="com.scg.model.MomBoard">
+               INSERT INTO board_line
+              (
+              boardid,
+              content,
+              uid,
+              creationdate
+              )
+              VALUES
+              (
+              #{boardid},
+              #{content},
+              #{uid},
+              now()
+              );
+       </insert>
+
+       <delete id="deleteBoardLine" parameterType="com.scg.model.MomBoard">
+              delete from board_line
+              where 1=1
+              <if test="lineid != 0">
+                     and lineid = #{lineid}
+              </if>
+              <if test="boardid != 0">
+                     and boardid = #{boardid}
+              </if>
+       </delete>
+
+       <select id="getBoardLikeCount" parameterType="com.scg.model.MomBoard" resultType="int">
+              select count(*)
+              from board_like
+              where 1=1
+              <if test="boardid != 0">
+                     and boardid=#{boardid}
+              </if>
+              <if test="uid != 0">
+                     and uid=#{uid}
+              </if>
+       </select>
+
+       <insert id="saveBoardLike" parameterType="com.scg.model.MomBoard">
+              INSERT INTO board_like
+              (
+              uid,
+              boardid,
+              creationdate)
+              VALUES
+              (
+              #{uid},
+              #{boardid},
+              now()
+              );
+       </insert>
+
+       <delete id="deleteBoardLike" parameterType="com.scg.model.MomBoard">
+              delete from board_like
+              where 1=1
+              <if test="boardid != 0">
+                     and boardid=#{boardid}
+              </if>
+              <if test="uid != 0">
+                     and uid=#{uid}
+              </if>
+              <if test="likeid != 0">
+                     and likeid=#{likeid}
+              </if>
+       </delete>
+
+       <insert id="saveBoardFile" parameterType="com.scg.model.MomBoardFile">
+              INSERT INTO board_file
+              (
+              boardid,
+              filename,
+              fileaddr,
+              crationdate)
+              VALUES
+              (
+              #{boardid},
+              #{filename},
+              #{fileaddr},
+              now()
+              )
+       </insert>
+
+       <delete id="deleteBoardFile" parameterType="com.scg.model.MomBoardFile">
+              delete from board_file
+              where 1=1
+              <if test="fileid != 0">
+                     and fileid=#{fileid}
+              </if>
+              <if test="boardid != 0">
+                     and boardid=#{boardid}
+              </if>
+       </delete>
+
+       <select id="getBoardFileList" parameterType="int" resultType="com.scg.model.MomBoardFile">
+            select *
+            from board_file
+            where boardid= #{param1}
+       </select>
+
+</mapper>

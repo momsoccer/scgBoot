@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.scg.persistence.MissionPassMapper">
+
+       <insert id="savePass" parameterType="com.scg.model.MissionPass">
+              INSERT INTO user_mission_pass
+              (
+              seq,
+              uid,
+              instructorid,
+              missionid,
+              usermissionid,
+              status,
+              passflag,
+              failuredisp,
+              inscomment,
+              evaltype,
+              cashpoint,
+              creationdate,
+              updatedate)
+              VALUES
+              (
+              #{seq},
+              #{uid},
+              #{instructorid},
+              #{missionid},
+              #{usermissionid},
+              #{status},
+              #{passflag},
+              #{failuredisp},
+              #{inscomment},
+              #{evaltype},
+              #{cashpoint},
+              now(),
+              now()
+              );
+       </insert>
+
+       <update id="updatePass" parameterType="com.scg.model.MissionPass">
+         update user_mission_pass SET
+              <if test="failuredisp != null">
+              failuredisp = #{failuredisp},
+	          </if>
+              <if test="inscomment != null">
+              inscomment = #{inscomment},
+              </if>
+              <if test="status != null">
+              status = #{status},
+              </if>
+              <if test="passflag != null">
+              passflag = #{passflag},
+              </if>
+               updatedate = now()
+        where 1=1
+        and  passid = #{passid}
+        <if test="uid != 0">
+             and uid = #{uid}
+        </if>
+        <if test="usermissionid != 0">
+              and usermissionid = #{usermissionid}
+       </if>
+       </update>
+
+       <select id="getMissionPassResultList" parameterType="com.scg.model.MissionPass" resultType="com.scg.model.MissionPass">
+              select passid,
+              ump.seq,
+              u.username,
+              u.profileimgurl as userimge,
+              ump.creationdate as change_creationdate,
+              mi.youtubeaddr as missionvideo,
+              umi.youtubeaddr as uservideo,
+              mi.missionname,
+              (select t.name
+              from team t,
+              teammember tm
+              where t.teamid = tm.teamid
+              and tm.uid = u.uid
+              and authority='MEMBER'
+              ) as teamname,
+              (
+              select sum(sumi.grade +
+
+              case when sumi.passflag='Y' then
+              sumi.passgrade
+              else
+              0 end
+
+              )
+              from usermission sumi
+              where sumi.uid = u.uid
+              ) as totalscore,
+              ump.status,
+              ump.instructorid,
+              ump.usermissionid,
+              ump.uid,
+              ump.cashpoint,
+              ump.creationdate,
+              ump.inscomment,
+              ump.failuredisp,
+              ump.passflag,
+              ump.updatedate,
+              (
+              select name
+              from mission_type ty
+              where ty.typeid = mi.typeid
+              ) as missiontype
+              from user_mission_pass ump,
+                   mission mi,
+                   usermission umi,
+              user u
+              where ump.uid = u.uid
+              and   ump.usermissionid = umi.usermissionid
+              and   mi.missionid = ump.missionid
+              and   ump.status in ('SUCCESS','REJECT')
+              <if test="passid != 0">
+                     and   ump.passid=#{passid}
+              </if>
+              <if test="instructorid != 0">
+                     and   ump.instructorid=#{instructorid}
+              </if>
+              <if test="usermissionid != 0">
+                     and   ump.usermissionid=#{usermissionid}
+              </if>
+              <if test="uid != 0">
+                     and   ump.uid=#{uid}
+              </if>
+       </select>
+
+
+       <select id="getMissionPassList" parameterType="com.scg.model.MissionPass" resultType="com.scg.model.MissionPass">
+              select passid,
+              ump.seq,
+              u.username,
+              u.profileimgurl as userimge,
+              ump.creationdate as change_creationdate,
+              mi.youtubeaddr as missionvideo,
+              umi.youtubeaddr as uservideo,
+              mi.missionname,
+              (select t.name
+              from team t,
+              teammember tm
+              where t.teamid = tm.teamid
+              and tm.uid = u.uid
+              and authority='MEMBER'
+              ) as teamname,
+              (
+              select sum(sumi.grade +
+
+              case when sumi.passflag='Y' then
+              sumi.passgrade
+              else
+              0 end
+
+              )
+              from usermission sumi
+              where sumi.uid = u.uid
+              ) as totalscore,
+              ump.status,
+              ump.instructorid,
+              ump.usermissionid,
+              ump.uid,
+              ump.cashpoint,
+              ump.creationdate,
+              ump.inscomment,
+              ump.failuredisp,
+              ump.passflag,
+              ump.updatedate,
+              (
+              select name
+              from mission_type ty
+              where ty.typeid = mi.typeid
+              ) as missiontype
+              from user_mission_pass ump,
+                   mission mi,
+                   usermission umi,
+                   user u
+              where ump.uid = u.uid
+              and   ump.usermissionid = umi.usermissionid
+              and   mi.missionid = ump.missionid
+              <if test="status != null">
+                     and   ump.status=#{status}
+              </if>
+              <if test="passid != 0">
+                     and   ump.passid=#{passid}
+              </if>
+              <if test="instructorid != 0">
+                     and   ump.instructorid=#{instructorid}
+              </if>
+              <if test="usermissionid != 0">
+                     and   ump.usermissionid=#{usermissionid}
+              </if>
+              <if test="uid != 0">
+                     and   ump.uid=#{uid}
+              </if>
+       </select>
+
+       <select id="getPassList" parameterType="com.scg.model.MissionPass" resultType="com.scg.model.MissionPass">
+              select ums.*,
+              (
+              select passgrade
+              from mission mi
+              where mi.missionid = ums.missionid
+              ) as passgrade,
+              ins.profileimgurl as insimge,
+              ins.name as insname,
+              (
+              select mt.name
+              from mission mi,
+              mission_type mt
+              where mi.typeid = mt.typeid
+              and mi.missionid = ums.missionid
+              ) as missiontype
+              from user_mission_pass ums,
+                   instructor ins
+              where ins.instructorid = ums.instructorid
+              <if test=" uid != 0 ">
+                     and  ums.uid = #{uid}
+              </if>
+              <if test=" usermissionid != 0 ">
+                     and  ums.usermissionid = #{usermissionid}
+              </if>
+              <if test=" missionid != 0 ">
+                     and  ums.missionid = #{missionid}
+              </if>
+              <if test=" evaltype != null ">
+                     and ums.evaltype = #{evaltype}
+              </if>
+       </select>
+
+       <select id="getMissionPass" parameterType="com.scg.model.MissionPass" resultType="com.scg.model.MissionPass">
+
+       </select>
+
+       <select id="getMaxSeq" parameterType="com.scg.model.MissionPass" resultType="int">
+              select max(seq)
+              from user_mission_pass
+              where 1=1
+              <if test=" uid !=0 ">
+                     and uid = #{uid}
+              </if>
+              <if test=" missionid !=0 ">
+                     and missionid = #{missionid}
+              </if>
+              <if test=" usermissionid !=0 ">
+                     and usermissionid = #{usermissionid}
+              </if>
+       </select>
+
+       <delete id="deletePass" parameterType="com.scg.model.MissionPass">
+              delete from user_mission_pass where passid = #{passid}
+       </delete>
+
+
+
+
+</mapper>

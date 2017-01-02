@@ -1,0 +1,338 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.scg.persistence.DataListMapper">
+
+    <select id="getTeamRankingScore" resultType="com.scg.datadto.TeamRankingVo" parameterType="int">
+        select *
+        from (
+        select t.name as teamname,
+               t.teamid,
+               t.instructorid,
+               t.emblem,
+               ins.profileimgurl as insimg,
+               ins.name as insname,
+               t.creationdate,
+				(
+               select sum(umi.grade + case when umi.passflag='Y' then
+               umi.passgrade else 0 end
+               )
+               from usermission umi,
+                    teammember stm
+               where umi.uid = stm.uid
+               and stm.teamid = t.teamid
+               ) as totalscore
+        from team t,
+             teammember tm,
+             instructor ins
+        where t.teamid = tm.teamid
+        and ins.instructorid = t.instructorid
+        and tm.authority='MEMBER'
+        group by t.name,
+               t.teamid,
+               t.instructorid,
+               t.emblem,
+               ins.profileimgurl,
+               ins.name,
+               t.creationdate
+        ) temp_table
+        order by totalscore desc limit #{param1}
+    </select>
+
+
+    <select id="getInsFileCount" resultType="int">
+        select count(filename)
+        from (
+        select fl.filename
+        from feedback_header fh,
+             feedback_line fl
+        where fh.feedbackid = fl.feedbackid
+        and fh.feedbacktype='video'
+        and type='ins'
+        and fh.instructorid=#{param2}
+        union all
+        select filename
+        from usermission umi
+        where umi.uid = #{param1}
+        ) team_table
+        where filename = #{param3}
+    </select>
+
+
+    <select id="getUserMissionCount" parameterType="int" resultType="com.scg.datadto.FeedDataVo">
+        select sum(incompletecount-completecount) as incompletecount,
+               sum(completecount) as completecount
+        from (
+        select count(*) as incompletecount,
+               0 as completecount
+        from mission_open_history moh
+        where moh.uid=#{param1}
+        union all
+        select 0 as incompletecount,
+               count(*) as completecount
+        from usermission umi
+        where umi.uid=#{param1}
+        and umi.passflag='Y'
+        ) temp_table
+    </select>
+
+
+    <select id="getPassData" parameterType="int" resultType="com.scg.datadto.FeedDataVo">
+    select sum(completecount) as completecount,
+       sum(incompletecount) as incompletecount
+    from (
+    select count(*) as incompletecount,
+           0 as completecount
+    from user_mission_pass ump
+    where 1=1
+    and ump.instructorid= #{param1}
+    and ump.status='REQUEST'
+    union all
+    select 0 as incompletecount,
+           count(*) as completecount
+    from user_mission_pass ump
+    where 1=1
+    and ump.instructorid= #{param1}
+    and ump.status!='REQUEST'
+    ) mission_pass_table
+    </select>
+
+
+    <select id="getFeedData" parameterType="int" resultType="com.scg.datadto.FeedDataVo">
+		select sum(count) as completecount,
+			   sum(noncount) as incompletecount
+        from (
+        select  count(*) as count,
+                0        as noncount
+        from (
+		select  count(*)
+		from feedback_header fh,
+             feedback_line   fl
+		where fh.feedbackid = fl.feedbackid
+        and   fh.instructorid = #{param1}
+        group by fh.instructorid,fh.feedbackid having count(*) = 2
+        ) inscount
+        union all
+		select  0   as count,
+                count(*)        as noncount
+        from (
+		select  count(*)
+		from feedback_header fh,
+             feedback_line   fl
+		where fh.feedbackid = fl.feedbackid
+        and   fh.instructorid = #{param1}
+        group by fh.instructorid,fh.feedbackid having count(*) = 1
+        ) inscount
+        ) table_count
+    </select>
+
+    <select id="getUserLevelDataList" parameterType="int" resultType="com.scg.datadto.UserLevelDataVo">
+        select umi.uid,
+        mt.name as mittiontype,
+        sum(umi.grade +
+
+          case when umi.passflag='Y' then
+        umi.passgrade
+        else
+        0
+        end
+
+        ) as score
+        from user u,
+        usermission umi,
+        mission mi,
+        mission_type mt
+        where u.uid =  umi.uid
+        and mi.missionid = umi.missionid
+        and mi.typeid = mt.typeid
+        and u.uid = #{param1}
+        group by u.uid,mt.name
+        union all
+        select umi.uid,
+        'TOTAL' as mittiontype,
+        sum(umi.grade +
+          case when umi.passflag='Y' then
+        umi.passgrade
+        else
+        0
+        end
+        ) as score
+        from user u,
+        usermission umi,
+        mission mi,
+        mission_type mt
+        where u.uid =  umi.uid
+        and mi.missionid = umi.missionid
+        and mi.typeid = mt.typeid
+        and u.uid = #{param1}
+    </select>
+
+
+    <select id="getMomMainList" resultType="com.scg.datadto.MainTypeListVo">
+        select typeid,
+               name,
+               description,
+               enabled,
+               backgraoundImage
+        from mission_type
+        order by typeid
+    </select>
+
+    <select id="getInsInfoList" parameterType="com.scg.ins.vo.InsInfoVo" resultType="com.scg.ins.vo.InsInfoVo">
+        select ins.instructorid,
+               ins.uid,
+               ins.name as name,
+               ins.profileimgurl,
+               t.name as teamname,
+               t.emblem,
+               ih.teamvideopoint,
+               ih.teamwordpoint,
+               ih.pubvideopoint,
+               ih.pubwordpoint,
+               ih.teamjoinpoint,
+               ih.teampasspoint,
+               ih.pubpasspoint,
+               (
+               select count(*)
+               from teammember tm
+               where tm.enabled='Y'
+               and tm.teamid = t.teamid
+               and tm.authority='member'
+               ) as teammembercount,
+                   (
+                   select count(*)
+                   from feedback_header h
+                   where h.instructorid = ins.instructorid
+                   ) as questioncount,
+                   (
+				   select count(*)
+                    from  feedback_header h,
+                          feedback_line l
+                    where h.feedbackid = l.feedbackid
+                    and l.type='ins'
+                    and h.instructorid = ins.instructorid
+                   ) as answercount,
+                   (
+                    select avg(l.evalscore)
+                    from  feedback_header h,
+                          feedback_line l
+                    where h.feedbackid = l.feedbackid
+                    and h.instructorid = ins.instructorid
+                    and l.type='ins'
+                    group by instructorid
+                   )  as estimation,
+                0 as insvidecount,
+               t.creationdate as teamcreationdate
+        from instructor ins,
+             instructor_apply app,
+             instructor_point_history ih,
+             team t
+        where 1=1
+        and   ins.instructorid = t.instructorid
+        and   ins.instructorid = app.instructorid
+        and   ins.instructorid = ih.instructorid
+        <if test="nouid != 0">
+            and   t.teamid != (
+            select st.teamid
+            from team st,
+                 teammember stm
+            where st.teamid = stm.teamid
+            and   stm.uid= #{nouid}
+            )
+        </if>
+    </select>
+
+    <select id="getInsInfo" parameterType="com.scg.ins.vo.InsInfoVo" resultType="com.scg.ins.vo.InsInfoVo">
+        select ins.instructorid,
+                    ins.uid,
+                    ins.name,
+                    ins.profileimgurl,
+                    t.name as teamname,
+                    t.emblem,
+                    ih.teamvideopoint,
+                    ih.teamwordpoint,
+                    ih.pubvideopoint,
+                    ih.pubwordpoint,
+                    ih.teamjoinpoint,
+                    ih.teampasspoint,
+                    ih.pubpasspoint,
+                    (
+                    select count(*)
+                    from teammember tm
+                    where tm.enabled='Y'
+                    and tm.teamid = t.teamid
+                    and tm.authority='member'
+                    ) as teammembercount,
+                   (
+                   select count(*)
+                   from feedback_header h
+                   where h.instructorid = ins.instructorid
+                   ) as questioncount,
+                   (
+				   select count(*)
+                    from  feedback_header h,
+                          feedback_line l
+                    where h.feedbackid = l.feedbackid
+                    and l.type='ins'
+                    and h.instructorid = ins.instructorid
+                   ) as answercount,
+                   (
+                    select avg(l.evalscore)
+                    from  feedback_header h,
+                          feedback_line l
+                    where h.feedbackid = l.feedbackid
+                    and h.instructorid = ins.instructorid
+                    and l.type='ins'
+                    group by instructorid
+                   )  as estimation,
+                   (
+                   0) as insvidecount,
+        t.creationdate as teamcreationdate
+        from instructor ins,
+        instructor_apply app,
+        instructor_point_history ih,
+        team t
+        where 1=1
+        and   ins.instructorid = t.instructorid
+        and   ins.instructorid = app.instructorid
+        and   ins.instructorid = ih.instructorid
+        and   teamid=#{teamid}
+    </select>
+
+    <select id="getTeamMemberList" parameterType="int" resultType="com.scg.datadto.UserMainVo">
+        select t.teamid,
+        u.uid,
+        u.username,
+        u.profileimgurl,
+        t.name as teamname,
+        (
+        select sum(grade + case when umi.passflag='Y' then
+						    passgrade
+                            else
+                            0 end
+        )
+        from usermission umi
+        where umi.uid = u.uid
+        ) as totalscore,
+        (
+        select count(*)
+        from feedback_header fh
+        where fh.uid = u.uid
+        ) as feedbackcount,
+        (
+        select count(*)
+        from usermission umi
+        where umi.uid = u.uid
+        and umi.passflag='Y'
+        ) as missionpasscount,
+        tm.creationdate
+        from team t,
+        teammember tm,
+        user u
+        where t.teamid = tm.teamid
+        and  tm.uid = u.uid
+        and tm.authority='MEMBER'
+        and t.instructorid = #{param1}
+        order by  tm.creationdate desc
+    </select>
+
+</mapper>

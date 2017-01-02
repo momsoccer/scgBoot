@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.scg.persistence.FavoriteMissionMapper">
+
+    <insert id="saveFavoriteMission" parameterType="com.scg.model.Common.FavoriteMission">
+        INSERT INTO favoritemission
+        (
+        uid,
+        missionid,
+        date,
+        attribute1,
+        attribute2,
+        attribute3,
+        attribute4,
+        attribute5)
+        VALUES
+        (
+        #{uid},
+        #{missionid},
+        now(),
+        #{attribute1},
+        #{attribute2},
+        #{attribute3},
+        #{attribute4},
+        #{attribute5}
+        );
+    </insert>
+
+    <delete id="deleteFavoriteMission" parameterType="com.scg.model.Common.FavoriteMission">
+        DELETE
+        from favoritemission
+        where 1=1
+        <if test="favoriteid != 0">
+            and favoriteid = #{favoriteid}
+        </if>
+        <if test="uid != 0">
+            and uid = #{uid}
+        </if>
+        <if test="missionid != 0">
+            and missionid = #{missionid}
+        </if>
+    </delete>
+
+    <select id="getCountFavoriteMission" parameterType="com.scg.model.Common.FavoriteMission" resultType="int">
+      select count(*)
+      from favoritemission
+      where 1=1
+        <if test="uid != 0">
+            and uid = #{uid}
+        </if>
+        <if test="missionid != 0">
+            and missionid = #{missionid}
+        </if>
+    </select>
+
+    <select id="getFavoriteList" parameterType="com.scg.model.Common.FavoriteMission" resultType="com.scg.model.Common.FavoriteMission">
+        select *
+        from favoritemission
+        where 1=1
+        <if test="uid != 0">
+            and uid = #{uid}
+        </if>
+        <if test="missionid != 0">
+            and missionid = #{missionid}
+        </if>
+    </select>
+
+    <select id="getFavorite" parameterType="com.scg.model.Common.FavoriteMission" resultType="com.scg.model.Common.FavoriteMission">
+        select *
+        from favoritemission
+        where 1=1
+        <if test="uid != 0">
+            and uid = #{uid}
+        </if>
+        <if test="missionid != 0">
+            and missionid = #{missionid}
+        </if>
+        LIMIT 1
+    </select>
+
+    <select id="getFavoriteMissionList" parameterType="com.scg.model.Mission" resultType="com.scg.model.Mission">
+        select ty.name as typename,
+        mi.*,
+        pt.getpoint,
+        pt.escapepoint,
+        (
+        select count(*)
+        from mission_open_history moh
+        where moh.uid = fm.uid
+        and   moh.missionid= mi.missionid
+        ) opencount,
+        (
+        select count(*)
+        from usermission um
+        where um.missionid = mi.missionid
+        and   um.uid =  fm.uid
+        ) uploadcount,
+        (
+        select count(*)
+        from usermission um
+        where um.missionid = mi.missionid
+        and   um.passflag='Y'
+        and   um.uid =  fm.uid
+        ) missionpasscount,
+        fm.uid
+        from favoritemission fm,
+        mission mi,
+        mission_type ty,
+        pointmanagement pt
+        where fm.missionid = mi.missionid
+        and  ty.typeid = mi.typeid
+        and  mi.missionid = pt.missionid
+        <if test="uid != 0">
+            and uid = #{uid}
+        </if>
+        order by sequence desc
+    </select>
+
+</mapper>

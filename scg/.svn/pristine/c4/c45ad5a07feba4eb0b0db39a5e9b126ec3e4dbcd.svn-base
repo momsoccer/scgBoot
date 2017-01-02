@@ -1,0 +1,570 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.scg.persistence.FeedbackMapper">
+
+       <select id="getFeedAllList" parameterType="com.scg.model.FeedbackHeader" resultType="com.scg.model.FeedbackHeader">
+              select
+                     (
+                     select tp.name
+                     from    mission mi,
+                             mission_type tp
+                     where mi.typeid = tp.typeid
+                     and mi.missionid=fh.missionid
+                     ) as missiontype,
+                      fh.feedbackid,
+                      fh.subject,
+                      fh.uid,
+                      fh.instructorid,
+                      fh.usermissionid,
+                      (
+                      select count(*)
+                      from feedback_line l
+                      where l.feedbackid = fl.feedbackid
+                      and l.type='ins'
+                     ) as replaycount,
+                     fh.feedbacktype,
+                     u.username,
+                     u.profileimgurl,
+                     (
+                     select t.name
+                     from team t,
+                          teammember tm
+                     where t.teamid = tm.teamid
+                     and  tm.uid = u.uid
+                     and  tm.authority='MEMBER'
+                     ) as teamname,
+                     fl.creationdate,
+                     fl.content,
+                     fh.cashpoint
+
+                     ,ins.name as insname
+                     ,ins.profileimgurl as insprofileimgurl
+                     ,rl.content as recontent
+                     ,rl.videoaddr
+                     ,rl.evalscore
+                     ,fh.pubstatus
+                     ,rl.creationdate as updatedate
+                     ,rl.feedbacklineid
+              from feedback_line fl,
+                   user u,
+                   instructor ins,
+                   feedback_header fh left join feedback_line rl
+              on fh.feedbackid = rl.feedbackid
+              and rl.type='ins'
+              where 1=1
+              and  fh.feedbackid = fl.feedbackid
+              and fh.uid = u.uid
+              and fl.type='user'
+              and fh.instructorid = ins.instructorid
+              <if test="feedbackid != 0">
+                and fh.feedbackid = #{feedbackid}
+              </if>
+              <if test="uid != 0">
+                     and fh.uid = #{uid}
+              </if>
+              <if test="instructorid != 0">
+                     and fh.instructorid = #{instructorid}
+              </if>
+              <if test="usermissionid != 0">
+                     and fh.usermissionid = #{usermissionid}
+              </if>
+       </select>
+
+
+       <select id="requestFeed" parameterType="com.scg.model.FeedbackHeader" resultType="com.scg.model.FeedbackHeader">
+              select h.feedbackid,
+                     u.uid,
+                     h.instructorid,
+                     u.profileimgurl,
+                     (
+                     select t.name
+                     from team t,
+                     teammember tm
+                     where t.teamid = tm.teamid
+                     and tm.uid = u.uid
+                     and authority='MEMBER'
+                     ) as teamname,
+                     u.username,
+                     h.feedbacktype,
+                     h.subject,
+                     h.cashpoint,
+                     l.content,
+                     l.videoaddr,
+                     l.creationdate,
+                     mt.name as missiontype,
+                     mi.missionname,
+                     mi.description,
+                     mi.youtubeaddr,
+              (
+              select sum(sumi.grade +
+
+              case when sumi.passflag='Y' then
+              sumi.passgrade
+              else
+              0 end
+
+              )
+              from usermission sumi
+              where sumi.uid = u.uid
+              ) as totalscore,
+              mi.missionid
+
+              from feedback_header h,
+                   feedback_line   l,
+                   user u,
+                   mission mi,
+                   mission_type mt
+              where h.feedbackid = l.feedbackid
+              and   u.uid = h.uid
+              and   h.missionid = mi.missionid
+              and   mi.typeid = mt.typeid
+              <if test="instructorid !=0 ">
+               and h.instructorid = #{instructorid}
+              </if>
+              <if test="instype =='user' ">
+              and   l.type='user'
+              and   not exists (
+                           select 'Y'
+                           from feedback_line sl
+                           where sl.type='ins'
+                           and  sl.feedbackid = l.feedbackid
+                           )
+              </if>
+       </select>
+
+
+       <insert id="saveFeedHeader" parameterType="com.scg.model.FeedbackHeader">
+              INSERT INTO feedback_header
+              (
+              feedbacktype,
+              missionid,
+              usermissionid,
+              uid,
+              instructorid,
+              cashpoint,
+              Frequency,
+              subject,
+              pubstatus,
+              instype,
+              creationdate
+              )
+              VALUES(
+              #{feedbacktype},
+              #{missionid},
+              #{usermissionid},
+              #{uid},
+              #{instructorid},
+              #{cashpoint},
+              #{Frequency},
+              #{subject},
+              #{pubstatus},
+              #{instype},
+              now()
+              )
+
+              <selectKey keyProperty="feedbackid" resultType="Integer" order="AFTER">
+                     SELECT LAST_INSERT_ID()
+              </selectKey>
+
+       </insert>
+
+       <select id="getFeedHeaderList" parameterType="com.scg.model.FeedbackHeader" resultType="com.scg.model.FeedbackHeader">
+              select h.*,
+              ins.name as insname
+              from feedback_header h,
+              instructor ins
+              where h.instructorid = ins.instructorid
+              and 1=1
+              <if test="uid != 0">
+                     and uid = #{uid}
+              </if>
+              <if test="feedbacktype != null">
+                     and feedbacktype = #{feedbacktype}
+              </if>
+              <if test="missionid != 0">
+                     and missionid = #{missionid}
+              </if>
+              <if test="usermissionid != 0">
+                     and usermissionid = #{usermissionid}
+              </if>
+              <if test="instructorid != 0">
+                     and instructorid = #{instructorid}
+              </if>
+              <if test="Frequency != 0">
+                     and Frequency = #{Frequency}
+              </if>
+              <if test="pubstatus != null">
+                     and pubstatus = #{pubstatus}
+              </if>
+              <if test="instype != null">
+                     and instype = #{instype}
+              </if>
+              <if test="subject != null">
+                     and subject like CONCAT('%',#{subject},'%')
+              </if>
+       </select>
+
+       <select id="getFeedHeader" parameterType="com.scg.model.FeedbackHeader" resultType="com.scg.model.FeedbackHeader">
+              select a.*,
+              (
+              select name
+              from instructor ins
+              where ins.instructorid = a.instructorid
+              ) as insname
+              from feedback_header a
+              where 1=1
+              <if test="uid != 0">
+                     and uid = #{uid}
+              </if>
+
+              <if test="feedbackid != 0">
+                     and feedbackid = #{feedbackid}
+              </if>
+              <if test="feedbacktype != null">
+                     and feedbacktype = #{feedbacktype}
+              </if>
+              <if test="missionid != 0">
+                     and missionid = #{missionid}
+              </if>
+              <if test="usermissionid != 0">
+                     and usermissionid = #{usermissionid}
+              </if>
+              <if test="instructorid != 0">
+                     and instructorid = #{instructorid}
+              </if>
+              <if test="Frequency != 0">
+                     and Frequency = #{Frequency}
+              </if>
+              <if test="pubstatus != null">
+                     and pubstatus = #{pubstatus}
+              </if>
+              <if test="instype != null">
+                     and instype = #{instype}
+              </if>
+              <if test="subject != null">
+                     and subject like CONCAT('%',#{subject},'%')
+              </if>
+              LIMIT 1
+       </select>
+
+       <select id="getFeedHeaderCount" parameterType="com.scg.model.FeedbackHeader" resultType="int">
+              select count(*)
+              from feedback_header
+              where 1=1
+              <if test="uid != 0">
+                     and uid = #{uid}
+              </if>
+              <if test="feedbacktype != null">
+                     and feedbacktype = #{feedbacktype}
+              </if>
+              <if test="missionid != 0">
+                     and missionid = #{missionid}
+              </if>
+              <if test="usermissionid != 0">
+                     and usermissionid = #{usermissionid}
+              </if>
+              <if test="instructorid != 0">
+                     and instructorid = #{instructorid}
+              </if>
+              <if test="Frequency != 0">
+                     and Frequency = #{Frequency}
+              </if>
+              <if test="pubstatus != null">
+                     and pubstatus = #{pubstatus}
+              </if>
+              <if test="instype != null">
+                     and instype = #{instype}
+              </if>
+              <if test="subject != null">
+                     and subject like CONCAT('%',#{subject},'%')
+              </if>
+       </select>
+
+
+       <insert id="saveFeedLine" parameterType="com.scg.model.FeedbackLine">
+              INSERT INTO feedback_line
+              (
+              feedbackid,
+              type,
+              videoaddr,
+              content,
+              image1,
+              image2,
+              image3,
+              evalscore,
+              creationdate,
+              filename
+              )
+              VALUES(
+              #{feedbackid},
+              #{type},
+              #{videoaddr},
+              #{content},
+              #{image1},
+              #{image2},
+              #{image3},
+              #{evalscore},
+              now(),
+              #{filename}
+              );
+       </insert>
+
+       <select id="getFeedLineList" parameterType="com.scg.model.FeedbackLine" resultType="com.scg.model.FeedbackLine">
+              select *
+              from feedback_line
+              where 1=1
+              <if test="feedbacklineid != 0">
+                     and feedbacklineid = #{feedbacklineid}
+              </if>
+              <if test="feedbackid != 0">
+                     and feedbackid = #{feedbackid}
+              </if>
+              <if test="type != null">
+                     and type = #{type}
+              </if>
+              <if test="videoaddr != null">
+                     and type = #{videoaddr}
+              </if>
+              <if test="content != null">
+                     and content like CONCAT('%',#{content},'%')
+              </if>
+       </select>
+
+       <select id="getFeedLine" parameterType="com.scg.model.FeedbackLine" resultType="com.scg.model.FeedbackLine">
+              select *
+              from feedback_line
+              where 1=1
+              <if test="feedbacklineid != 0">
+                     and feedbacklineid = #{feedbacklineid}
+              </if>
+              <if test="feedbackid != 0">
+                     and feedbackid = #{feedbackid}
+              </if>
+              <if test="type != null">
+                     and type = #{type}
+              </if>
+              <if test="videoaddr != null">
+                     and type = #{videoaddr}
+              </if>
+              <if test="content != null">
+                     and content like CONCAT('%',#{content},'%')
+              </if>
+              LIMIT 1
+       </select>
+
+       <select id="getFeedLineCount" parameterType="com.scg.model.FeedbackLine" resultType="int">
+              select count(*)
+              from feedback_line
+              where 1=1
+              <if test="feedbacklineid != 0">
+                     and feedbacklineid = #{feedbacklineid}
+              </if>
+              <if test="feedbackid != 0">
+                     and feedbackid = #{feedbackid}
+              </if>
+              <if test="type != null">
+                     and type = #{type}
+              </if>
+              <if test="videoaddr != null">
+                     and videoaddr = #{videoaddr}
+              </if>
+              <if test="content != null">
+                     and content like CONCAT('%',#{content},'%')
+              </if>
+       </select>
+
+       <select id="getFeedBackList" parameterType="com.scg.model.FeedbackHeader" resultType="com.scg.model.FeedbackHeader">
+              select fh.instructorid,
+                     (
+                     select name
+                     from instructor t
+                     where t.instructorid = fh.instructorid
+                     ) as insname,
+                     fh.feedbackid,
+                     fh.feedbacktype,
+                     fh.uid,
+                     fh.missionid,
+                     (
+                     select mi.missionname
+                     from mission mi
+                     where mi.missionid = fh.missionid
+                     ) as missionname,
+                     fh.usermissionid,
+                     fh.cashpoint,
+                     fh.pubstatus,
+                     fh.instructorid,
+                     fl.type,
+                     fl.videoaddr,
+                     fl.content,
+                     fl.creationdate,
+                     u.profileimgurl,
+              fl.feedbacklineid,
+              fl.evalscore,
+              u.username,
+              (
+              select t.profileimgurl
+              from instructor t
+              where t.instructorid = fh.instructorid
+              ) as insprofileimgurl,
+              (
+              select sum(sumi.grade +
+
+              case when sumi.passflag='Y' then
+              sumi.passgrade
+              else
+              0 end
+
+              )
+              from usermission sumi
+              where sumi.uid = u.uid
+              ) as totalscore
+              from feedback_header fh,
+                   feedback_line fl,
+                   user u
+              where fh.feedbackid = fl.feedbackid
+              and  fh.uid = u.uid
+              <if test="uid != 0">
+                     and fh.uid = #{uid}
+              </if>
+              <if test="instructorid != 0">
+                     and fh.instructorid = #{instructorid}
+              </if>
+              <if test="usermissionid != 0">
+                     and fh.usermissionid = #{usermissionid}
+              </if>
+       </select>
+
+       <update id="updateLine" parameterType="com.scg.model.FeedbackLine" >
+              update feedback_line fl SET
+              <if test="content != null">
+                     content = #{content},
+              </if>
+              <if test="evalscore != null">
+                     evalscore = #{evalscore},
+              </if>
+              creationdate = now()
+              where feedbackid = #{feedbackid}
+              and   feedbacklineid = #{feedbacklineid}
+              <if test="type != null">
+                     and type = #{type}
+              </if>
+       </update>
+
+       <delete id="deleteLine" parameterType="com.scg.model.FeedbackLine" >
+         delete from feedback_line where feedbackid = #{feedbackid}
+       </delete>
+
+       <select id="getFeedBackTotalList" parameterType="com.scg.datadto.FeedBackDataVo" resultType="com.scg.datadto.FeedBackDataVo">
+              select case
+                     when l.type='user' then
+                     'request'
+                     when l.type='ins' then
+                     'answer'
+                     end as datatype,
+                     case
+                     when l.type='user' then
+                     u.profileimgurl
+                     when l.type='ins' then
+                     ins.profileimgurl
+                     end as profileimgurl,
+                     h.feedbackid,
+                     u.uid,ins.instructorid,
+                     case when l.type='user' then
+                     u.username
+                     when l.type='ins' then
+                     ins.name
+                     end as name,
+                     case when l.type='user' then
+                     ins.name
+                     when l.type='ins' then
+                     u.username
+                     end as toname,
+                     h.feedbacktype,
+                     mt.name as missiontypename,
+                     mi.missionname,
+                     mi.description,
+                     l.evalscore,
+                     l.creationdate,
+                     case
+                     when l.type='user' then
+                     (select sum(ui.grade+ui.passgrade)
+                     from usermission ui
+                     where ui.uid= u.uid)
+                     when l.type='ins' then
+                     0
+                     end as totalscore,
+                     l.videoaddr,
+                     case when l.type='user' then
+                     (
+                     select t.name
+                     from team t,
+                     teammember tm
+                     where t.teamid = tm.teamid
+                     and tm.uid = u.uid
+                     and authority='MEMBER'
+                     )
+                     when l.type='ins' then
+                     (
+                     select t.name
+                     from team t,
+                     teammember tm
+                     where t.teamid = tm.teamid
+                     and tm.uid = u.uid
+                     and authority='OWNER'
+                     )
+                     end as teamname,
+                      l.content,
+                     (
+                     select sum(sumi.grade +
+
+              case when sumi.passflag='Y' then
+              sumi.passgrade
+              else
+              0 end
+
+              )
+                     from usermission sumi
+                     where sumi.uid = u.uid
+                     ) as totalscore
+              from   feedback_header h,
+                     feedback_line   l,
+                     user u,
+                     mission mi,
+                     mission_type mt,
+                     instructor ins
+              where h.feedbackid = l.feedbackid
+              and   h.instructorid = ins.instructorid
+              and   u.uid = h.uid
+              and   h.missionid = mi.missionid
+              and   mi.typeid = mt.typeid
+              <if test="uid != 0">
+                     and u.uid = #{uid}
+              </if>
+              <if test="instructorid != 0">
+                     and ins.instructorid = #{instructorid}
+              </if>
+              <if test="missionname != null">
+                     and mt.missionname like CONCAT('%',#{missionname},'%')
+              </if>
+              and   h.feedbackid in
+              (
+              select fh.feedbackid
+              from  feedback_header fh,
+              feedback_line fl
+              where fh.feedbackid = fl.feedbackid
+              and   fl.type='ins'
+              and fh.instructorid=#{instructorid}
+              )
+
+              <trim prefix="ORDER BY">
+                     <if test="orderbytype == 'totalscore' ">
+                            totalscore desc
+                     </if>
+                     <if test="orderbytype == 'feedbackid' ">
+                            h.feedbackid desc
+                     </if>
+              </trim>
+              LIMIT #{queryRow}
+       </select>
+
+</mapper>

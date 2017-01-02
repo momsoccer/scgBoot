@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="Description" content="Man of the Match, MOM">
+<meta name="Keywords" content="MOM, 몸싸커, 축구교실, 축구레슨, 축구동영상, 스타트업">
+<title>MOM, Man of the Match</title>
+<link rel="stylesheet" type="text/css" href="css/common.css" />
+<link rel="stylesheet" type="text/css" href="css/default.css" />
+<link rel="stylesheet" type="text/css" href="css/motion.css" />
+<script type="text/javascript" charset="UTF-8" src="js/jquery-2.2.3.min.js"></script>
+<script type="text/javascript" charset="UTF-8" src="js/mobile-detect.min.js"></script>
+<script type="text/javascript" charset="UTF-8" src="js/imagesloaded.pkgd.min.js"></script>
+<script type="text/javascript" charset="UTF-8" src="js/common_n.js"></script>
+<script type="text/javascript" charset="UTF-8" src="js/gnb-main.js"></script>
+<script type="text/javascript" charset="UTF-8" src="js/common.function.js"></script>
+<script type="text/javascript" charset="UTF-8" src="js/jquery.transit.min.js"></script>
+<link rel="stylesheet" type="text/css" href="css/gallery.css" media="screen" />
+<script type="text/javascript" src="js/jquery.themepunch.tools.min.js"></script>          
+<script type="text/javascript" src="js/jquery.themepunch.megafoliopro.js"></script>
+<link rel="stylesheet" href="css/jquery.fancybox.css?v=2.1.3" type="text/css" media="screen" />
+<script type="text/javascript" src="js/jquery.fancybox.pack.js?v=2.1.3"></script>
+</head>
+
+<body>
+<div id="skipNav">
+    <a href="#container"><span>본문 바로가기</span></a>
+</div>
+<!-- S : header -->
+    <header>
+        <div class="navi">
+            <h1><a href="/">MOM싸커</a></h1>
+			<div class="gnb">
+				<ul>
+                    <li><span class="line"></span><a href="company.html" class="depth1">Mom Soft 소개</a></li>
+                    <li><span class="line"></span><a href="service.html" class="depth1">몸싸커앱</a></li>
+                    <li><span class="line"></span><a href="gallery.html" class="depth1">갤러리</a></li>
+                    <li><span class="line"></span><a href="people.html" class="depth1">사람들</a></li>
+				</ul>
+			</div>
+			<div class="navi-bg"><div class="white-bg"></div></div>
+			<a href="" class="menu-icon">전체메뉴 보기</a>
+			<div class="m-menu">
+				<div class="logo"><img src="images/common/logo_g.png" alt="MOM싸커" /></div>
+				<div class="m-menu-in">
+					<ul>
+                        <li><a href="company.html" class="depth1">Mom Soft 소개</a>
+                        </li>
+                        <li><a href="service.html" class="depth1">몸싸커앱</a>
+                        </li>
+                        <li><a href="gallery.html" class="depth1">갤러리</a>
+                        </li>
+                        <li><a href="people.html" class="depth1">사람들</a>
+					</ul>
+				</div>
+				<a href="" class="close"><img src="images/common/close.png" alt="닫기" /></a>
+			</div>
+
+        </div>
+    </header>
+<!-- E : header -->
+
+<!-- S : container -->
+ <div class="visual-area">
+	<div class="tit-img">
+		<h2 class="hidden">사람들</h2>
+		<p>M.O.M을 소개합니다!</p>
+	</div>
+	<div class="visual-img">
+		<img src="images/common/sub_visual_03.jpg" alt="" />
+	</div>
+</div>
+<div id="container">
+    <div class="contents ">
+        <!--서브 타이틀 str-->
+		<div class="sub_title_wrap">
+			<h3 class="sub_t"><strong>M.O.M</strong>Gallery</h3>
+			<p class="sub_i">M.O.M은 새로운 축구 기술과 가치 창출로 생활과 문화를 바꾸는 혁신을 준비합니다.</p>
+			<div class="sub_box sub_box_noline">M.O.M은 Mobile, PC웹등 Online Service를 바탕으로 한 축구 레슨을 통해 다양한 재미와 교육의 기회를 제공합니다.<br />Mobile, PC웹등 Online Service를 바탕으로 한 축구 레슨을 통해 다양한 재미와 교육의 기회를 제공합니다.</div>
+		</div>
+        <!--//서브 타이틀 end-->
+		<!-- 탭 str-->
+		<div class="tab_A">
+			<ul>
+				<li class="on"><a href="gallery.html">이미지</a></li>
+				<li class="last"><a href=" video.html">동영상</a></li>
+			</ul>
+		</div>
+		<!--//탭 end-->
+		 <!--갤러리 소개 str-->
+		<div class="megafolio-container light-bg-entries">
+			<!-- ONE ENTRY IN THE GALLERY -->
+			<div class="mega-entry" data-src="images/main/visual_bg01.png" data-width="577" data-height="500">
+				<div class="mega-hover">
+						<div class="mega-hovertitle">이미지 타이틀<div class="mega-hoversubtitle">이미지 설명 간단..</div></div>
+						<div class="mega-hoverlink"></div>
+						<a class="fancybox" rel="group" href="images/main/visual_bg01.png"><div class="mega-hoverview"></div></a>
+				</div>
+			</div>
+			<!-- ONE ENTRY IN THE GALLERY -->
+			<div class="mega-entry" data-src="images/main/visual_bg01.png" data-width="577" data-height="500">
+				<div class="mega-hover">
+						<div class="mega-hovertitle">이미지 타이틀<div class="mega-hoversubtitle">이미지 설명 간단..</div></div>
+						<div class="mega-hoverlink"></div>
+						<a class="fancybox" rel="group" href="images/main/visual_bg01.png"><div class="mega-hoverview"></div></a>
+				</div>
+			</div>
+			<!-- ONE ENTRY IN THE GALLERY -->
+			<div class="mega-entry" data-src="images/main/visual_bg01.png" data-width="577" data-height="500">
+				<div class="mega-hover">
+						<div class="mega-hovertitle">이미지 타이틀<div class="mega-hoversubtitle">이미지 설명 간단..</div></div>
+						<div class="mega-hoverlink"></div>
+						<a class="fancybox" rel="group" href="images/main/visual_bg01.png"><div class="mega-hoverview"></div></a>
+				</div>
+			</div>
+			<!-- ONE ENTRY IN THE GALLERY -->
+			<div class="mega-entry" data-src="images/main/visual_bg01.png" data-width="577" data-height="500">
+				<div class="mega-hover">
+						<div class="mega-hovertitle">이미지 타이틀<div class="mega-hoversubtitle">이미지 설명 간단..</div></div>
+						<div class="mega-hoverlink"></div>
+						<a class="fancybox" rel="group" href="images/main/visual_bg01.png"><div class="mega-hoverview"></div></a>
+				</div>
+			</div>
+		</div>
+		 <!--//갤러리 소개 end-->
+    </div>
+</div>
+<!-- E : container -->
+<section class="link-area">
+	<div class="cont">
+		<p class="t">partnership cooperation</p>
+		<p class="i">M.O.M과 함께 더 많은 기회를 함께 하시고 싶으십니까?</p>
+		<a href="mailto:momsoccer@naver.com" class="mail">momsoccer@naver.com</a>
+		<div class="sns">
+			<a href="#" class="fb"><img src="images/common/sns_f.png" alt="페이스북"></a>
+			<a href="#" class="bg"><img src="images/common/sns_b.png" alt="블로그"></a>
+		</div>
+	</div>
+</section>
+<a href="" class="topbt"><img src="images/common/top.png" alt="top" /></a>
+<footer>
+	<div class="footer-in">
+		Copyright(c) m.o.m All Rights Reserved.
+	</div>
+</footer>
+<script type="text/javascript">
+
+
+				jQuery(document).ready(function() {
+
+					var api=jQuery('.megafolio-container').megafoliopro(
+						{
+							filterChangeAnimation:"fade",			// fade, rotate, scale, rotatescale, pagetop, pagebottom,pagemiddle
+							filterChangeSpeed:600,					// Speed of Transition
+							filterChangeRotate:99,					// If you ue scalerotate or rotate you can set the rotation (99 = random !!)
+							filterChangeScale:0.6,					// Scale Animation Endparameter
+							delay:20,
+							defaultWidth:980,
+							paddingHorizontal:10,
+							paddingVertical:10,
+							layoutarray:[22]		// Defines the Layout Types which can be used in the Gallery. 2-9 or "random". You can define more than one, like {5,2,6,4} where the first items will be orderd in layout 5, the next comming items in layout 2, the next comming items in layout 6 etc... You can use also simple {9} then all item ordered in Layout 9 type.
+
+						});
+
+
+					// INITIALISATION OF THE FANCY BOX (LIVE BOX)
+					jQuery(".fancybox").fancybox();
+
+
+					// THE FILTER FUNCTION
+					jQuery('.filter').click(function() {
+						jQuery('.filter').each(function() { jQuery(this).removeClass("selected")});
+						api.megafilter(jQuery(this).data('category'));
+						jQuery(this).addClass("selected");
+						jQuery('body').find('ul.filter_list').slideUp(500).addClass("closed");
+						jQuery('body').find('.current-filter').html(jQuery(this).text());
+					});
+
+
+					// DROP DOWN LIST OPEN AND CLOSE
+					jQuery('.filter_list_button').click(function() {
+						var ul=jQuery('body').find('ul.filter_list');
+						if (ul.hasClass('closed')) {
+							ul.slideDown(500);
+							ul.removeClass('closed');
+						} else {
+							ul.slideUp(500);
+							ul.addClass('closed');
+						}
+					});
+
+
+					// THE REMIX OF GALLERY IF ONE OF THE OTHER GRID HAS BEED SELECTED
+					jQuery('.order').click(function()  {
+						jQuery('.order').each(function() { jQuery(this).removeClass("selected")});
+						api.megaremix(jQuery(this).data('order'));
+						jQuery(this).addClass("selected");
+
+					});
+
+
+					// IF ANIMATION HAS BEED CHANGED, THE BASIC ANIMATION STYLE SHOULD BE CHANGED
+					jQuery('.animb').click(function()  {
+						var speed=jQuery('#tp-speed').val();
+						var rotate=jQuery('#tp-rotate').val();
+						var scale=jQuery('#tp-scale').val();
+						jQuery('.animb').each(function() { jQuery(this).removeClass("selected")});
+						api.megaanimchange(jQuery(this).data('ant'),speed,rotate,scale);
+						jQuery(this).addClass("selected");
+					});
+
+
+					// PADDING CHANGER, THE GALLERY WILL BE REMIXED IN CASE THE PADDING HAS BEEN CHANGED
+					jQuery(".pad").change(function() {
+						var mc = jQuery('.megafolio-container');
+						mc.data('paddingh',jQuery("#ph").val());
+						mc.data('paddingv',jQuery("#pv").val());
+						api.megaremix(api.megagetcurrentorder());
+					});
+
+
+					// OPEN CLOSE THE OPTION PARTS IN THE HEADER
+					jQuery(".opener").click(function() {
+						var op=jQuery(this);
+						if (op.hasClass('active'))	{
+							op.removeClass('active');
+							jQuery('.switcher').slideUp(600);
+							jQuery('.megatitle').slideDown(600);
+							jQuery('.givetry').slideDown(600);
+						} else {
+							op.addClass('active');
+							jQuery('.switcher').slideDown(600);
+							jQuery('.megatitle').slideUp(600);
+							jQuery('.givetry').slideUp(600);
+						}
+					})
+
+
+					// CHANGE THE BACKGROUND IMAGES
+					jQuery('.bgch').click(function() {
+						var oldbg=jQuery('.bgch.selected');
+						var newbg=jQuery(this);
+						jQuery('.bgdiv').removeClass(oldbg.data('bg'));
+						jQuery('.bgdiv').addClass(newbg.data('bg'));
+						oldbg.removeClass("selected");
+						newbg.addClass("selected");
+
+					})
+
+					// ADD MORE ITEMS TO THE GALLERY
+				   jQuery('.addmore').click(function() {
+						for (var i=0;i<Math.round(Math.random()*4+1);i++) {
+							var newentry=createEntry();
+							api.megaappendentry(newentry);
+						}
+					})
+
+
+
+
+
+					/***********************************************
+						- 	CREATE RANDOM ENTRIES FOR PREVIEW
+								THIS IS ONLY AN EXAMPLE -
+					************************************************/
+					function createEntry() {
+						// RANDOM CATEGORIE
+						var cnu = Math.round(Math.random()*5+1);
+						var cat ="one";
+						if (cnu==1) cat="one";
+						else
+						if (cnu==2) cat="two";
+						else
+						if (cnu==3) cat="three";
+						else
+						cat=="four";
+
+						var imgsrc=Math.round(Math.random()*8+1);
+						var  newentry='<div class="mega-entry  cat-'+cat+' cat-all"  id="mega-entry-'+Math.round(Math.random()*1500+1000)+'" data-src="images/image'+imgsrc+'.jpg" data-width="577" data-height="500">'+
+							             '<div class="mega-hover">'+
+    										 '<div class="mega-hovertitle">CAR VINTAGE RACING<div class="mega-hoversubtitle">CATEGORY FOUR</div></div>'+
+    										 '<div class="mega-hoverlink"></div>'+
+    										 '<a class="fancybox" rel="group" href="images/image'+imgsrc+'.jpg"><div class="mega-hoverview"></div></a>'+
+										 '</div>'+
+								    '</div>';
+
+						return newentry;
+					}
+
+				});
+
+			</script>
+
+</body>
+</html>

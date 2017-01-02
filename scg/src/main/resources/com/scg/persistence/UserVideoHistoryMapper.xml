@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.scg.persistence.UserVideoHistoryMapper">
+
+       <insert id="saveVideoHistory" parameterType="com.scg.datadto.UserVideoHistoryVo">
+              INSERT INTO user_video_history
+              (
+              uid,
+              missionid,
+              filename,
+              creationdate)
+              VALUES
+              (
+              #{uid},
+              #{missionid},
+              #{filename},
+              now()
+              );
+       </insert>
+
+       <select id="getVideoHistory" parameterType="com.scg.datadto.UserVideoHistoryVo" resultType="com.scg.datadto.UserVideoHistoryVo">
+              select *
+              from user_video_history
+              where 1=1
+              <if test="uid != 0">
+                     and  uid= #{uid}
+              </if>
+              <if test="missionid != 0">
+                     and  missionid= #{missionid}
+              </if>
+              <if test="filename != null">
+                     and  filename= #{filename}
+              </if>
+       </select>
+
+</mapper>

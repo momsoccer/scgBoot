@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.scg.persistence.AdBoardMapper">
+
+       <select id="getList" resultType="com.scg.adboard.AdBoardVo" parameterType="com.scg.adboard.AdBoardVo">
+              select a.*,
+                     (
+                     select count(*)
+                     from adv_board_file b
+                     where b.advid = a.advid
+                     ) as filecount
+              from adv_board a
+              order by creationdate desc limit #{limit} offset #{offset}
+       </select>
+
+       <select id="getFileList" resultType="com.scg.adboard.AdBoardFile" parameterType="int">
+              select a.*
+              from adv_board_file a
+              where a.advid = #{param1}
+       </select>
+
+       <select id="getHeader" resultType="com.scg.adboard.AdBoardVo" parameterType="int">
+              select a.*,
+              (
+              select count(*)
+              from adv_board_file b
+              where b.advid = a.advid
+              ) as filecount
+              from adv_board a
+              where advid = #{param1}
+        </select>
+
+</mapper>

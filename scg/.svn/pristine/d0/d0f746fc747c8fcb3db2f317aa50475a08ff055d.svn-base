@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="Description" content="Man of the Match, MOM">
+<meta name="Keywords" content="MOM, 몸싸커, 축구교실, 축구레슨, 축구동영상, 스타트업">
+<title>MOM, Man of the Match</title>
+<link rel="stylesheet" type="text/css" href="css/common.css" />
+<link rel="stylesheet" type="text/css" href="css/default.css" />
+<link rel="stylesheet" type="text/css" href="css/motion.css" />
+<script type="text/javascript" charset="UTF-8" src="js/jquery-2.2.3.min.js"></script>
+<script type="text/javascript" charset="UTF-8" src="js/mobile-detect.min.js"></script>
+<script type="text/javascript" charset="UTF-8" src="js/imagesloaded.pkgd.min.js"></script>
+<script type="text/javascript" charset="UTF-8" src="js/common_n.js"></script>
+<script type="text/javascript" charset="UTF-8" src="js/gnb-main.js"></script>
+<script type="text/javascript" charset="UTF-8" src="js/common.function.js"></script>
+<script type="text/javascript" charset="UTF-8" src="js/jquery.transit.min.js"></script>
+<link rel="stylesheet" type="text/css" href="css/gallery.css" media="screen" />
+<script type="text/javascript" src="js/jquery.themepunch.tools.min.js"></script>          
+<script type="text/javascript" src="js/jquery.themepunch.megafoliopro.js"></script>
+</head>
+
+<body>
+<div id="skipNav">
+    <a href="#container"><span>본문 바로가기</span></a>
+</div>
+<!-- S : header -->
+    <header>
+        <div class="navi">
+            <h1><a href="/">MOM싸커</a></h1>
+			<div class="gnb">
+				<ul>
+                    <li><span class="line"></span><a href="company.html" class="depth1">Mom Soft 소개</a></li>
+                    <li><span class="line"></span><a href="service.html" class="depth1">몸싸커앱</a></li>
+                    <li><span class="line"></span><a href="gallery.html" class="depth1">갤러리</a></li>
+                    <li><span class="line"></span><a href="people.html" class="depth1">사람들</a></li>
+				</ul>
+			</div>
+			<div class="navi-bg"><div class="white-bg"></div></div>
+			<a href="" class="menu-icon">전체메뉴 보기</a>
+			<div class="m-menu">
+				<div class="logo"><img src="images/common/logo_g.png" alt="MOM싸커" /></div>
+				<div class="m-menu-in">
+					<ul>
+                        <li><a href="company.html" class="depth1">Mom Soft 소개</a>
+                        </li>
+                        <li><a href="service.html" class="depth1">몸싸커앱</a>
+                        </li>
+                        <li><a href="gallery.html" class="depth1">갤러리</a>
+                        </li>
+                        <li><a href="people.html" class="depth1">사람들</a>
+					</ul>
+				</div>
+				<a href="" class="close"><img src="images/common/close.png" alt="닫기" /></a>
+			</div>
+
+        </div>
+    </header>
+<!-- E : header -->
+
+<!-- S : container -->
+ <div class="visual-area">
+	<div class="tit-img">
+		<h2 class="hidden">사람들</h2>
+        <p>Mom Soft/Soccer 다양한 콘텐츠를 소개합니다!</p>
+	</div>
+	<div class="visual-img">
+		<img src="images/common/sub_visual_03.jpg" alt="" />
+	</div>
+</div>
+<div id="container">
+    <div class="contents ">
+        <!--서브 타이틀 str-->
+		<div class="sub_title_wrap">
+			<h3 class="sub_t"><strong>M.O.M</strong>Gallery</h3>
+			<p class="sub_i">Mom Soccer 앱의 대표 미션 영상들을 소개합니다</p>
+			<div class="sub_box sub_box_noline"></div>
+		</div>
+        <!--//서브 타이틀 end-->
+		<!-- 탭 str-->
+		<div class="tab_A">
+			<ul>
+				<li><a href="gallery.html">이미지</a></li>
+				<li class="last on"><a href=" video.html">동영상</a></li>
+			</ul>
+		</div>
+		<!--//탭 end-->
+		 <!--갤러리 소개 str-->
+		<div class="megafolio-container light-bg-entries">
+			<!-- loop str-->
+			<div class="mega-entry" data-width="577" data-height="700">
+				<iframe width="560" height="315" src="https://www.youtube.com/embed/oJAjd06u6qw" frameborder="0" allowfullscreen></iframe>
+				<!-- caption 
+				<div class="gallerycaption-bottom">동영상 제목<div class="gallerysubline">동영상 설명..간단..</div></div>
+				-->
+			</div>
+			<!--// loop end-->
+			<div class="mega-entry" data-width="577" data-height="700">
+				<iframe width="560" height="315" src="https://www.youtube.com/embed/hxWLOvFivSQ" frameborder="0" allowfullscreen></iframe>
+			</div>
+			<div class="mega-entry" data-width="577" data-height="700">
+				<iframe width="560" height="315" src="https://www.youtube.com/embed/-0_lcQFwBJA" frameborder="0" allowfullscreen></iframe>
+			</div>
+			<div class="mega-entry" data-width="577" data-height="700">
+				<iframe width="560" height="315" src="https://www.youtube.com/embed/DbJLI-swF7U" frameborder="0" allowfullscreen></iframe>
+			</div>
+		</div>
+		 <!--//갤러리 소개 end-->
+    </div>
+</div>
+<!-- E : container -->
+<section class="link-area">
+    <div class="cont">
+        <p class="t">partnership cooperation</p>
+        <p class="i">Mom Soft와 새로운 비즈니스 기회를 만들기 원하시는 분들의 연락을 기다립니다</p>
+        <a href="mailto:ishimsungbo@gmail.com" class="mail">ishimsungbo@gmail.com phone: 010-2499-1591</a>
+        <div class="sns">
+			<a href="https://open.kakao.com/o/grKKino" target="_blank" class="talk"><img src="images/common/talk.png" alt="실시간상담"></a>
+			<a href="https://www.facebook.com/momsoftware/" target="_blank" class="fb"><img src="images/common/sns_f.png" alt="페이스북"></a>
+			<a href="http://blog.naver.com/momsoccer" target="_blank" class="bg"><img src="images/common/sns_b.png" alt="블로그"></a>
+        </div>
+    </div>
+</section>
+<a href="" class="topbt"><img src="images/common/top.png" alt="top" /></a>
+<footer>
+	<div class="footer-in">
+		Copyright(c) Mom Soft All Rights Reserved.
+	</div>
+</footer>
+<script type="text/javascript">
+    jQuery(document).ready(function() {
+        var api=jQuery('.megafolio-container').megafoliopro(
+                {
+                    filterChangeAnimation:"scale",	// fade, rotate, scale, rotatescale, pagetop, pagebottom,pagemiddle
+                    filterChangeSpeed:600,					// Speed of Transition
+                    filterChangeRotate:99,					// If you ue scalerotate or rotate you can set the rotation (99 = random !!)
+                    filterChangeScale:0.6,					// Scale Animation Endparameter
+                    delay:20,								// The Time between the Animation of single mega-entry points
+                    defaultWidth:980,
+                    paddingHorizontal:20,					// Padding between the mega-entrypoints
+                    paddingVertical:20,
+                    layoutarray:[22]		// Defines the Layout Types which can be used in the Gallery. 2-9 or "random". You can define more than one, like {5,2,6,4} where the first items will be orderd in layout 5, the next comming items in layout 2, the next comming items in layout 6 etc... You can use also simple {9} then all item ordered in Layout 9 type.
+                });
+    });
+</script>
+
+
+</body>
+</html>

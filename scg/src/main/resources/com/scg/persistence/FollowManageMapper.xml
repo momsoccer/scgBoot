@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.scg.persistence.FollowManageMapper">
+
+       <insert id="saveFollow" parameterType="com.scg.model.Common.FollowManage">
+              INSERT INTO followmanage
+              (
+              uid,
+              followuid,
+              date,
+              attribute1,
+              attribute2,
+              attribute3,
+              attribute4,
+              attribute5)
+              VALUES
+              (
+              #{uid},
+              #{followuid},
+              now(),
+              #{attribute1},
+              #{attribute2},
+              #{attribute3},
+              #{attribute4},
+              #{attribute5})
+       </insert>
+
+       <delete id="deleteFollow" parameterType="com.scg.model.Common.FollowManage">
+              DELETE from followmanage
+              where 1=1
+              <if test="followid != 0">
+              and followid = #{followid}
+              </if>
+              <if test="uid != 0">
+              and uid = #{uid}
+              </if>
+              <if test="followuid != 0">
+              and followuid = #{followuid}
+              </if>
+       </delete>
+
+       <select id="getFollowUserCount" resultType="int" parameterType="com.scg.model.Common.FollowManage">
+              select count(*)
+              from followmanage
+              where 1=1
+              <if test="uid != 0">
+              and  uid = #{uid}
+              </if>
+              <if test="followuid != 0">
+              and  followuid = #{followuid}
+              </if>
+       </select>
+
+       <select id="getMeFollowList" resultType="com.scg.model.Common.FollowManage" parameterType="com.scg.model.Common.FollowManage">
+              select f.followid,
+                     u.username,
+                     u.profileimgurl,
+                     u.uid,
+                     (
+                     select t.name
+                     from team t,
+                     teammember tm
+                     where t.teamid = tm.teamid
+                     and tm.uid = u.uid
+                     ) as teamname,
+                     (
+                     select count(*)
+                     from usermission um
+                     where um.uid= u.uid
+                     ) as usermissioncount,
+                     (
+                     select sum(grade + passgrade)
+                     from usermission um
+                     where um.uid= u.uid
+                     ) as score,
+                     (
+                     select count(*)
+                     from followmanage fw
+                     where fw.followuid = u.uid
+                     ) as followercount,
+                     (
+                     select count(*)
+                     from followmanage fw
+                     where fw.uid = u.uid
+                     ) as followingcount,
+                     (
+                     select count(*)
+                     from board bd
+                     where bd.writeuid = u.uid
+                     ) as mecommentcount,
+                     (
+                     select count(*)
+                     from board bd
+                     where bd.uid = u.uid
+                     ) as commentcount,
+              <if test="followtype == 1 ">
+                   1 as        followtype,
+              </if>
+              <if test="followtype == 2 ">
+                     2 as        followtype,
+              </if>
+                     20 as level
+              from followmanage f,
+              user u
+              where 1=1
+              <if test="followtype == 1 ">
+                     and  f.followuid = u.uid
+                     and f.uid = #{uid}
+              </if>
+              <if test="followtype == 2 ">
+                     and  f.uid = u.uid
+                     and  f.followuid = #{uid}
+              </if>
+              order by f.date
+       </select>
+
+       <select id="getFollowerCount" resultType="com.scg.datadto.TeamMapVo" parameterType="int">
+              select count(*) as count,
+                     'M' as type
+              from followmanage
+              where followuid = #{param1}
+              union all
+              select count(*) as count,
+                     'Y' as type
+              from followmanage
+              where  uid=      #{param1}
+       </select>
+
+</mapper>

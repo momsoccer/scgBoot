@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.scg.persistence.ReportMapper">
+
+       <insert id="saveReport" parameterType="com.scg.model.Report">
+              INSERT INTO report
+              (
+              type,
+              reason,
+              uid,
+              publisherid,
+              content,
+              creationdate,
+              flag
+              )
+              VALUES
+              (
+              #{type},
+              #{reason},
+              #{uid},
+              #{publisherid},
+              #{content},
+              now(),
+              'N'
+              )
+       </insert>
+
+       <select id="getReportList" parameterType="com.scg.model.Report" resultType="com.scg.model.Report">
+              select  u.username,
+              r.*,
+              (
+              select count(*)
+              from usermission umi
+              where umi.uid = r.uid
+              ) as uploadcount,
+              (
+              select COUNT(*)
+              from report ty
+              where ty.type='REQ_POINT'
+              AND ty.flag='Y'
+              ) as pointcount,
+              (
+              select name
+              from team t,
+              teammember tm
+              where t.teamid = tm.teamid
+              and tm.uid = r.uid
+              ) as teamname
+              from report r,
+              user u
+              where r.uid= u.uid
+              <if test="type != null">
+                     and  r.type = #{type}
+              </if>
+              <if test="flag != null">
+                     and   r.flag = #{flag}
+              </if>
+       </select>
+
+       <update id="pointUpdateReport" parameterType="com.scg.model.Report">
+              update report set
+              flag = #{flag}
+              where id = #{id}
+       </update>
+
+</mapper>

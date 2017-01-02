@@ -1,0 +1,344 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.scg.persistence.UserMissionMapper">
+
+
+    <select id="getUmissionList" parameterType="com.scg.model.UserMission" resultType="com.scg.model.UserMission">
+        select  umi.*,
+                u.username,
+                u.profileimgurl,
+                (
+                select t.name
+                from team t, teammember tm
+                where t.teamid = tm.teamid
+                and   tm.uid = u.uid
+                ) as teamname,
+                (
+                select count(*)
+                from mybookmark book
+                where book.usermissionid = umi.usermissionid
+                ) as bookmarkcount,
+                (
+                select  count(*)
+                from mybookmark mk
+                where  mk.usermissionid = umi.usermissionid
+                and uid = #{uid}
+                ) mycheck,
+                (
+                select count(*)
+                from board bd
+                where bd.usermissionid= umi.usermissionid
+                and   bd.uid = umi.uid
+                ) boardcount,
+                umi.passflag,
+                1 mycheck,
+                (
+                select mi.missionname
+                from mission mi
+                where mi.missionid=umi.missionid
+                ) as missionname,
+        (
+        select mt.name
+        from mission_type mt,
+        mission mi
+        where mt.typeid=mi.typeid
+        and mi.missionid = umi.missionid
+        ) as missiontype
+        from usermission umi,user u
+        where umi.uid = u.uid
+        <if test="missionid != 0">
+            and umi.missionid = #{missionid}
+        </if>
+        <if test="uid != 0">
+            and umi.uid != #{uid}
+        </if>
+        <if test="passflag != null">
+            and umi.passflag = #{passflag}
+        </if>
+        order by creationdate desc
+        LIMIT #{queryRow}
+    </select>
+
+
+    <select id="getUserMissionList" parameterType="com.scg.model.UserMission" resultType="com.scg.model.UserMission">
+        select  umi.*,
+        u.username,
+        u.profileimgurl,
+        (
+        select t.name
+        from team t, teammember tm
+        where t.teamid = tm.teamid
+        and   tm.uid = u.uid
+        ) as teamname,
+        (
+        select count(*)
+        from mybookmark book
+        where book.usermissionid = umi.usermissionid
+        ) as bookmarkcount,
+        (
+        select count(*)
+        from board bd
+        where bd.usermissionid= umi.usermissionid
+        and   bd.uid = umi.uid
+        ) boardcount,
+        umi.passflag,
+        (
+        select mi.missionname
+        from mission mi
+        where mi.missionid=umi.missionid
+        ) as missionname,
+        (
+        select  count(*)
+        from mybookmark mk
+        where  mk.usermissionid = umi.usermissionid
+        and uid = #{uid}
+        ) mycheck,
+        umi.grade+( case when umi.passflag='Y' then umi.passgrade else 0 end
+        ) as totalscore,
+        (
+        select mt.name
+        from mission_type mt,
+        mission mi
+        where mt.typeid=mi.typeid
+        and mi.missionid = umi.missionid
+        ) as missiontype,
+        mi.sequence as sequence
+        from usermission umi,
+        user u,
+        mission mi
+        where umi.uid = u.uid
+        and  umi.missionid = mi.missionid
+        <if test="usermissionid != 0">
+            and umi.usermissionid = #{usermissionid}
+        </if>
+        <if test="missionid != 0">
+            and umi.missionid = #{missionid}
+        </if>
+        <if test="uid != 0">
+            and umi.uid = #{uid}
+        </if>
+        <if test="uploadflag != null">
+            and umi.uploadflag = #{uploadflag}
+        </if>
+        <if test="passflag != null">
+            and umi.passflag = #{passflag}
+        </if>
+    </select>
+
+    <select id="getUserMission" parameterType="com.scg.model.UserMission" resultType="com.scg.model.UserMission">
+        select  umi.*,
+                u.username,
+                u.profileimgurl,
+                (
+                select t.name
+                from team t, teammember tm
+                where t.teamid = tm.teamid
+                and   tm.uid = u.uid
+                ) as teamname,
+                (
+                select count(*)
+                from mybookmark book
+                where book.usermissionid = umi.usermissionid
+                ) as bookmarkcount,
+                (
+                select count(*)
+                from board bd
+                where bd.usermissionid= umi.usermissionid
+                and   bd.uid = umi.uid
+                ) boardcount,
+                umi.passflag,
+                (
+                select mi.missionname
+                from mission mi
+                where mi.missionid=umi.missionid
+                ) as missionname,
+                (
+                select  count(*)
+                from mybookmark mk
+                where  mk.usermissionid = umi.usermissionid
+                and uid = #{uid}
+                ) mycheck,
+        umi.grade+( case when umi.passflag='Y' then umi.passgrade else 0 end
+        ) as totalscore,
+        (
+        select mt.name
+        from mission_type mt,
+        mission mi
+        where mt.typeid=mi.typeid
+        and mi.missionid = umi.missionid
+        ) as missiontype,
+        mi.sequence as sequence
+        from usermission umi,
+             user u,
+             mission mi
+        where umi.uid = u.uid
+        and  umi.missionid = mi.missionid
+        <if test="usermissionid != 0">
+            and umi.usermissionid = #{usermissionid}
+        </if>
+        <if test="missionid != 0">
+            and umi.missionid = #{missionid}
+        </if>
+        <if test="uid != 0">
+            and umi.uid = #{uid}
+        </if>
+        <if test="uploadflag != null">
+            and umi.uploadflag = #{uploadflag}
+        </if>
+        <if test="passflag != null">
+            and umi.passflag = #{passflag}
+        </if>
+        LIMIT 1
+    </select>
+
+    <select id="getUserMissionCount" parameterType="com.scg.model.UserMission" resultType="int">
+        select count(*)
+        from usermission
+        where 1=1
+        <if test="usermissionid != 0">
+            and umi.usermissionid = #{usermissionid}
+        </if>
+        <if test="missionid != 0">
+            and umi.missionid = #{missionid}
+        </if>
+        <if test="uid != 0">
+            and umi.uid = #{uid}
+        </if>
+        <if test="uploadflag != null">
+            and umi.uploadflag = #{uploadflag}
+        </if>
+        <if test="passflag != null">
+            and umi.passflag = #{passflag}
+        </if>
+        LIMIT 1
+    </select>
+
+
+    <insert id="saveUserMission" parameterType="com.scg.model.UserMission">
+        INSERT INTO usermission
+        (
+        missionid,
+        uid,
+        subject,
+        description,
+        uploadflag,
+        youtubeaddr,
+        passflag,
+        videoaddr,
+        filename,
+        grade,
+        passgrade,
+        creationdate,
+        updatedate)
+        VALUES
+        (
+        #{missionid},
+        #{uid},
+        #{subject},
+        #{description},
+        #{uploadflag},
+        #{youtubeaddr},
+        #{passflag},
+        #{videoaddr},
+        #{filename},
+        #{grade},
+        #{passgrade},
+        now(),
+        now()
+        );
+        <selectKey keyProperty="usermissionid" resultType="Integer" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+
+    <update id="updateUserMission" parameterType="com.scg.model.UserMission">
+      update usermission set
+        <if test=" youtubeaddr != null">
+          youtubeaddr=#{youtubeaddr},
+        </if>
+        <if test=" filename != null">
+            filename = #{filename},
+        </if>
+        <if test=" videoaddr != null">
+          videoaddr = #{videoaddr},
+        </if>
+        <if test=" passflag != null">
+          passflag = #{passflag},
+        </if>
+        <if test=" passgrade != 0">
+          passgrade = #{passgrade},
+        </if>
+        <if test=" description != null">
+            description = #{description},
+        </if>
+        <if test=" subject != null">
+        subject = #{subject},
+        </if>
+          updatedate = now()
+      where 1=1
+      <if test="missionid != 0">
+        and missionid = #{missionid}
+      </if>
+        <if test="usermissionid != 0">
+            and usermissionid = #{usermissionid}
+        </if>
+        <if test="uid != 0">
+            and uid = #{uid}
+        </if>
+    </update>
+
+    <insert id="saveUserMissionEval" parameterType="com.scg.model.UserMissionEval">
+        INSERT INTO usermission_eval
+        (
+        usermissionid,
+        uid,
+        instructorid,
+        coment,
+        score,
+        creationdate
+        )
+        VALUES
+        (
+        #{usermissionid},
+        #{uid},
+        #{instructorid},
+        #{coment},
+        #{score},
+        now()
+        );
+        <selectKey keyProperty="evalid" resultType="Integer" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+
+    <select id="getUserMissionEvalCount" parameterType="com.scg.model.UserMissionEval" resultType="int">
+        select count(*)
+        from usermission_eval ue
+        where 1=1
+        <if test="uid != 0">
+            and ue.uid = #{uid}
+        </if>
+        <if test="instructorid != 0">
+            and ue.instructorid = #{instructorid}
+        </if>
+        <if test="score != 0">
+            and ue.score = #{score}
+        </if>
+        LIMIT 1
+    </select>
+
+    <select id="getUserMissionAvg" parameterType="com.scg.model.UserMissionEval" resultType="com.scg.datadto.EvalVo">
+        select sum(evalid) as sum,
+               avg(score)  as avg
+        from usermission_eval ue
+        where 1=1
+        <if test="uid != 0">
+            and ue.uid = #{uid}
+        </if>
+        <if test="usermissionid != 0">
+            and ue.usermissionid = #{usermissionid}
+        </if>
+
+    </select>
+
+</mapper>

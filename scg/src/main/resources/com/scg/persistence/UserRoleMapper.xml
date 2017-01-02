@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.scg.persistence.UserRoleMapper">
+
+    <select id="getUserRoleList" parameterType="com.scg.model.UserRole" resultType="com.scg.model.UserRole">
+        select *
+        from   userrole
+        where  1=1
+        <if test="uid != 0">
+            and uid = #{uid}
+        </if>
+        <if test="rolename != null">
+            and  rolename= #{rolename}
+        </if>
+    </select>
+
+    <insert id="saveUserRole" parameterType="com.scg.model.Role">
+        INSERT INTO userrole
+      (
+        uid,
+        rolename)
+       VALUES(
+        #{uid},
+        #{rolename}
+       )
+
+        <selectKey keyProperty="roleid" resultType="Integer" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+
+
+</mapper>

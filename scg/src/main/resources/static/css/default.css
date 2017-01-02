@@ -1,0 +1,184 @@
+@charset "utf-8";
+
+.main section {position:relative;}
+.main-section {position:relative; height:800px;}
+.roll {position:absolute; width:100%; height:800px; text-align:left; overflow:hidden;}
+.roll .roll-in {position:absolute; width:100%;  height:800px; top:0;color:#fff;}
+.roll .roll-in .roll-in-txt {position:absolute; z-index:5; text-align:left; z-index:5; }
+.roll .roll-in .roll-in-txt .txt {display:block; font-size:20px; line-height:30px; letter-spacing:0 }
+.roll .roll-in .roll-in-txt .tit {display:block; margin-top:35px; margin-bottom:15px}
+.roll .roll-in .roll-in-txt .tit img {max-width:200px}
+.roll .roll-in .img {position:absolute; top:0; left:50%; width:100%; margin-left:-960px; height:100%; z-index:1 }
+.roll .roll-in .img img {height:100% }
+.roll .roll-in.r1 .img img, .roll .roll-in.r2 .img img, .roll .roll-in.r3 .img img {display:none;}
+.roll .roll-in .more {display:block;margin-top:14px}
+.roll .roll-in .more a {display:inline-block;}
+.roll .roll-in.r1 .roll-in-txt .t_i{margin:0;font-size:30px;}
+.roll .roll-in.r1 .roll-in-txt .tit {margin:0}
+.roll .roll-in.r1 .roll-in-txt {bottom:35%; text-align:center;}
+.roll .roll-in.r1 .roll-in-txt .txt {margin:25px 0 21px 0;font-size:20px;line-height:30px}
+.roll .roll-in.r1 .more a {display:inline-block; background: url('../images/main/google_logo.png') no-repeat 130px center; background-size: 20px auto;color:#fff; padding:0 50px 0 30px; height:33px; font-size:14px; line-height:33px; border:1px solid #fff}
+.roll .roll-in.r2 .roll-in-txt , .roll .roll-in.r3 .roll-in-txt ,  .roll .roll-in.r4 .roll-in-txt {bottom:15%}
+.roll .roll-in .roll-in-txt ul:after {clear:both; display:block; content:"";}
+.roll .roll-in .roll-in-txt ul li {float:left;}
+.roll .roll-in.r2 .roll-in-txt ul li:nth-child(2) {margin:0 20px 0 33px; margin-top:34px }
+.roll .roll-in.r2 .roll-in-txt ul li:last-child {margin-top:34px }
+.roll .roll-in.r2 .roll-in-txt .tit {margin-top:35px; margin-bottom:6px;font-size:44px;font-family: -apple-system,BlinkMacSystemFont,"Segoe UI","Roboto","Oxygen","Cantarell","Open Sans","Helvetica Neue","Ubuntu","Nanum Gothic", Dotum, Arial}
+.roll .roll-in.r3 .roll-in-txt .tit {margin-top:35px; margin-bottom:6px;font-size:44px;font-family: -apple-system,BlinkMacSystemFont,"Segoe UI","Roboto","Oxygen","Cantarell","Open Sans","Helvetica Neue","Ubuntu","Nanum Gothic", Dotum, Arial}
+.roll .roll-in.r1 .hidden-image {position:absolute; width:100%; height:100%; bottom:0px}
+.roll .roll-in.r1 video, .roll .roll-in.r2 video, .roll .roll-in.r3 video{position:absolute; width:100%; bottom:0px}
+.roll .roll-in.r3 .roll-in-txt ul li:first-child  {margin-top:5px}
+.roll .roll-in.r3 .roll-in-txt ul li:last-child  {margin-top:13px;}
+.roll .roll-in.r3 .roll-in-txt ul li:nth-child(2) {margin:0 15px 0 18px }
+.roll .roll-in.r4 .roll-in-txt ul li:nth-child(2)  {margin:21px 18px 0 43px}
+.roll .roll-in.r4 .roll-in-txt ul li:last-child  {margin-top:27px}
+.roll .roll-in.r1 .img {background:url('../images/main/intro_i01.jpg') no-repeat center 0;background-size:cover } 
+.roll .roll-in.r2 .img {background:url('../images/main/intro_i02.jpg') no-repeat center 0;background-size:cover } 
+.roll .roll-in.r3 .img {background:url('../images/main/intro_i03.jpg') no-repeat center 0;background-size:cover } 
+.bts {position:absolute; bottom:24px; text-align:center; width:100%; margin:0 auto; z-index:50; }
+.bts span.bt1 a {box-shadow:1px 1px 1px inset}
+.bts span a {display:inline-block; width:13px; height:13px; border-radius:50%; background:#808080; margin-right:8px; font-size:0; vertical-align:middle; text-indent:-9999px}
+.bts span a.on {background:#fff}
+.bts a:last-child {margin-right:0}
+.bts .mouse{margin-right:10px;display:none;height:20px;line-height:16px}
+.bts span.bt2 {display:none;margin-left:7px}
+.bts span.bt2 a {margin-right:0; padding:3.5px; border:1px solid #fff; border-radius:0; text-indent:0; opacity:1}
+.bts span.bt2 a.stop {margin-right:-3px; background:url(../images/main/stop_bt_off.png) no-repeat transparent center}
+.bts span.bt2 a.stop.on {margin-right:-3px; background:#fff url(../images/main/stop_bt_on.png) no-repeat center}
+.bts span.bt2 a.play {margin-left:0; background:url(../images/main/play_bt_off.png) no-repeat transparent center}
+.bts span.bt2 a.play.on {margin-left:0; background:#fff url(../images/main/play_bt_on.png) no-repeat center}
+
+.main-tit  {position:relative; z-index:2; width:100%; margin:0 auto; text-align:center;padding-top:146px;}
+.main-tit h2 {font-size:40px; margin-bottom:5px; color:#fff}
+.main-tit p {font-size:16px; letter-spacing:0}
+.dim {position:absolute; top:0; left:0;  width:100%; height:100%; background:#000; opacity:0.3 !important; z-index:1 }
+.dotbg {position:absolute; top:0; left:0;  width:100%; height:100%; background:url(http://www.cjenc.co.kr/kr/images/main/dot.png) 0 0 repeat; z-index:2 }
+.lightbg {position:absolute; top:0; left:0;  width:100%; height:100%; background:url(../images/main/light.png) no-repeat 0 0; z-index:3;background-size:cover }
+
+.m_visual {position:relative; width:100%; height:720px}
+.m_visual .main-tit {position:initial; height:100%; box-sizing:border-box; }
+.m_visual canvas {position:absolute; left:0; top:0; bottom:0; z-index:400; }
+.m_visual .main-tit a {display:block}
+.m_visual .main-tit br {display:none}
+.m_visual .main-tit h2 {position:absolute; z-index:200; top:100px; width:100%}
+.m_visual .main-tit p {position:absolute; z-index:400; bottom:50px; width:100%; color:#fff}
+.visualbt span:first-child {display:inline-block; color:#fff}
+.visualbt span {font-size:30px; }
+.visualbt.visualbg01 {position:absolute; z-index:300; top:0; left:0; width:33.3%; height:720px; line-height:720px}
+.visualbt.visualbg02 {position:absolute; z-index:300; top:0; left:33.3%; width:33.3%; height:720px; line-height:720px}
+.visualbt.visualbg03 {position:absolute; z-index:300; top:0; right:0; width:33.4%; height:720px; line-height:720px}
+.visualbt .visualover {display:block; position:absolute; top:0; left:0; width:100%; height:720px; line-height:600px; font-size:30px; color:#fff; background-color: rgba(0,0,0,0.5 ); opacity:0}
+.visualbt img {display:block; position:absolute; top:50%; left:50%; margin-top:-33px; margin-left:-33px; opacity:0}
+.visualbt .visualover span {max-width:100%; margin:300px auto 0}
+li.visualbg01 {position:absolute; z-index:100; top:0; left:0; width:33.3%; height:720px;background:url(../images/main/visual_bg01.png) no-repeat center}
+li.visualbg02 {position:absolute; z-index:100; top:0; left:33.3%; width:33.3%; height:720px;background:url(../images/main/visual_bg02.png) no-repeat center}
+li.visualbg03 {position:absolute; z-index:100; top:0; right:0; width:33.4%; height:720px;background:url(../images/main/visual_bg03.png) no-repeat center right}
+
+.link-area {position:relative; width:100%; background:#1e1e1e; background-size:cover; z-index:5}
+.link-area .cont {position:relative;margin:0 auto; padding:50px 0 20px}
+.link-area .cont .sns{position:absolute;top:50px;right:0}
+.link-area .cont .sns .talk{margin-right:10px}
+.link-area .cont .t{color:#dc372b;font-size:24px;font-family: -apple-system,BlinkMacSystemFont,"Segoe UI","Roboto","Oxygen","Cantarell","Open Sans","Helvetica Neue","Ubuntu","Nanum Gothic", Dotum, Arial}
+.link-area .cont .i{color:#7b7b7b;font-size:15px;margin-top:0}
+.link-area .cont .mail{display:inline-block;background:url('../images/common/ar_cor.png') no-repeat 0 center;padding-left:48px;font-size:18px;color:#fff;font-family: -apple-system,BlinkMacSystemFont,"Segoe UI","Roboto","Oxygen","Cantarell","Open Sans","Helvetica Neue","Ubuntu","Nanum Gothic", Dotum, Arial}
+
+.bgno {background:none !important}
+
+@media all and (min-width:0\0) and (min-resolution:.001dpcm) {
+.roll .roll-in.r1 video {display:none !important}
+.roll .roll-in.r2 video {display:none !important}
+.roll .roll-in.r3 video {display:none !important}
+.roll .roll-in.r1 .img img {display:block;} 
+.roll .roll-in.r2 .img img {display:block;} 
+.roll .roll-in.r3 .img img {display:block;}
+}
+
+@media all and (min-width:1600px) {
+.m_visual {background-size:cover}
+.link-area {background-size:cover}
+}
+
+@media all and (min-width:1280px) {
+.roll .roll-in.r1 .roll-in-txt {width:1100px;margin:0 auto; left:50%; margin-left:-550px}
+.roll .roll-in .roll-in-txt {width:768px; left:15%}
+.link-area .cont  {max-width:1100px; }
+.roll {max-width:1920px}
+.bts {max-width:1920px}
+
+}
+@media all and (max-width:1279px) {
+.link-area {height:675px}
+.link-area .cont {padding-left:50px; padding-right:50px; box-sizing:border-box}
+.roll .roll-in .img img {left:0; display:none}
+.roll .roll-in .img {width:100%; left:0; margin-left:0 !important; }
+.roll .roll-in.r1 .img img, .roll .roll-in.r2 .img img, .roll .roll-in.r1 .img3 img {display:none}
+.roll .roll-in.r1 .img {background:url(../images/main/intro_i01.jpg) no-repeat center 0 !important;background-size:cover !important } 
+.roll .roll-in.r2 .img {background:url(../images/main/intro_i02.jpg) no-repeat center 0 !important;background-size:cover !important} 
+.roll .roll-in.r3 .img {background:url(../images/main/intro_i03.jpg) no-repeat center 0 !important;background-size:cover !important} 
+.roll .roll-in.r4 .img {background:url(../images/main/main_rolling4.jpg) no-repeat center 0;background-size:cover } 
+.roll .roll-in .roll-in-txt {left:50px}
+.roll .roll-in.r1 .roll-in-txt {left:50%; margin-left:-313.5px }
+.bts .mouse {display:none !important}
+
+.visualbt span, .visualbt .visualover {font-size:25px}
+
+}
+@media all and (max-width:1024px) {
+}
+
+@media all and (max-width:960px) {
+
+}
+@media all and (max-width:767px) {
+.roll .roll-in.r1 video {display:none !important}
+.roll .roll-in.r2 video {display:none !important}
+.roll .roll-in.r3 video {display:none !important}
+.roll .roll-in.r1 .roll-in-txt {width:100%; margin:0 auto; left:0}
+.main-section {height:auto; min-height:480px}
+.roll {height:480px}
+.roll .roll-in { height:480px; }
+.roll .roll-in.r1 .roll-in-txt .tit img {width:30%}
+.roll .roll-in .roll-in-txt ul {display:none}
+.roll .roll-in.r2 .roll-in-txt , .roll .roll-in.r3 .roll-in-txt , .roll .roll-in.r4 .roll-in-txt  {bottom:15%}
+.roll .roll-in .roll-in-txt {left:15px}
+.roll .roll-in .roll-in-txt .tit {margin-top:0; margin-bottom:13px}
+.roll .roll-in.r1 .roll-in-txt .tit  {width:85%; margin:0 auto}
+.roll .roll-in .roll-in-txt .txt {font-size:14px; line-height:18px; letter-spacing:0 }
+.roll .roll-in.r1 .roll-in-txt .txt {font-size:14px; line-height:16px}
+.roll .roll-in .more a {font-size:10px}
+.roll .roll-in .img img {height:auto }
+.roll .roll-in.r2 .roll-in-txt .tit {font-size:28px}
+.roll .roll-in.r3 .roll-in-txt .tit {font-size:28px}
+.roll .roll-in.r1 .img {background:url('../images/main/intro_i01.jpg') no-repeat center 0;background-size:cover } 
+.roll .roll-in.r2 .img {background:url('../images/main/intro_i02.jpg') no-repeat center 0;background-size:cover } 
+.roll .roll-in.r3 .img {background:url('../images/main/intro_i03.jpg') no-repeat center 0;background-size:cover } 
+.main-section.business .bg {display:none}
+.main-tit {padding:35px 15px 0; box-sizing:border-box}
+.main-tit h2 {font-size:30px; color:#333; margin-bottom:7px; line-height:1.2}
+.main-tit p {font-size:14px; line-height:18px}
+.m_visual {height:699px; background:#dbd9d6}
+.m_visual .main-tit {padding:20px 15px 0; }
+.m_visual .main-tit h2 {position:static; width:100%; margin:0 auto; font-size:24px; color:#fff}
+.m_visual .main-tit p {display:none}
+.m_visual .main-tit ul li {display:none}
+.visualbt {display:block; position:absolute}
+.visualbt.visualbg01 {top:0; width:100%; height:233px; background:url(../images/main/visual_bg01.png) no-repeat 0 0; background-size:cover}
+.visualbt.visualbg02 {top:233px; left:0; width:100%; height:234px; background:url(../images/main/visual_bg02.png) no-repeat  0 0; background-size:cover}
+.visualbt.visualbg03 {top:466px; left:0; width:100%; height:233px; background:url(../images/main/visual_bg03.png) no-repeat  0 0; background-size:cover}
+.visualbt .visualover {height:233px; line-height:180px; font-size:24px}
+.visualbt:hover .visualover {display:block; opacity:1}
+.visualbt span:first-child {display:block; line-height:180px; text-align:center; font-size:24px}
+.visualbt span {display:block; text-align:center; width:100%; line-height:233px; color:#fff}
+.visualbt.visualover img {max-width:75%}
+.visualbt img {opacity:1; top:150px}
+.link-area {width:100%; height:auto; background-size:cover}
+.link-area .cont {padding:40px 15px 30px;}
+.link-area .cont .t{font-size:16px}
+.link-area .cont .i{font-size:12px}
+.link-area .cont .mail{font-size:12px}
+.link-area .cont .sns{top:10px}
+.link-area .cont .sns img{height:30px}
+.footer-in{padding:15px}
+}
+
+

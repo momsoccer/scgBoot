@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.scg.persistence.MissionGradeMapper">
+
+<select id="getMissionGradeList" parameterType="com.scg.model.MissionGrade" resultType="com.scg.model.MissionGrade">
+select grade,
+       gradename
+from   missiongrade;
+</select>
+
+<insert id="saveMissionGrade" parameterType="com.scg.model.MissionGrade">
+insert into missiongrade (grade,
+                          gradename
+)
+values (#{grade},
+        #{gradename}
+)
+on duplicate key 
+update gradename = #{gradename};
+</insert>
+
+<delete id="deleteMissionGrade" parameterType="com.scg.model.MissionGrade">
+delete from missiongrade
+where  grade = #{grade};
+</delete>
+
+</mapper>

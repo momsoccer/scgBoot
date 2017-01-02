@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.scg.persistence.UserMainMapper">
+
+       <select id="getUserMainList" parameterType="com.scg.datadto.UserMainVo" resultType="com.scg.datadto.UserMainVo">
+              select mt.name as missiontype,
+              u.username,
+              u.profileimgurl,
+              (
+              select name
+              from team t,
+              teammember tm
+              where t.teamid = tm.teamid
+              and tm.authority='MEMBER'
+              and tm.uid = u.uid
+              ) as teamname,
+              umi.passflag,
+              umi.youtubeaddr as uservideo,
+              umi.grade,
+              umi.passgrade,
+              mi.missionname,
+              mi.description,
+              mi.sequence,
+              mi.youtubeaddr as missionvideo,
+              (
+              select count(*)
+              from board bd
+              where bd.uid = u.uid
+              and bd.usermissionid = umi.usermissionid
+              ) as boardcount,
+              (
+              select count(*)
+              from feedback_header fh
+              where fh.uid=u.uid
+              and fh.usermissionid = umi.usermissionid
+              ) as feedbackcount,
+              (
+              select ins.name
+              from team t,
+              teammember tm,
+              instructor ins
+              where t.teamid = tm.teamid
+              and t.instructorid = ins.instructorid
+              and tm.authority='MEMBER'
+              and tm.uid = u.uid
+              ) as insname,
+              umi.creationdate,
+              u.uid,
+              umi.usermissionid,
+              mi.missionid,
+              (
+              select t.instructorid
+              from team t,
+              teammember tm
+              where 1=1
+              and t.teamid = tm.teamid
+              and tm.authority='MEMBER'
+              and tm.uid = u.uid
+              ) as instructorid,
+              (
+              select sum(grade+
+              case when passflag='Y' then
+              passgrade
+              else
+              0
+              end
+              )
+              from usermission sumi
+              where sumi.uid = u.uid
+              ) as totalscore,
+              umi.subject as usersubject,
+              umi.description as userdescription,
+              (
+              select count(*)
+              from mybookmark mb
+              where mb.usermissionid = umi.usermissionid
+              ) as bookmarkcount,
+              mi.cndescription,
+              mi.cnname,
+              mi.cnprecon,
+              mi.enname,
+              mi.endescription,
+              mi.enprecon
+              from user u,
+              usermission umi,
+              mission mi,
+              mission_type mt
+              where 1=1
+              and u.uid = umi.uid
+              and umi.missionid = mi.missionid
+              and mi.typeid = mt.typeid
+              <if test=" listCount != 0">
+              and mi.typeid in (   select typeid
+                                   from mission_type ty
+                                   where ty.name in
+                                   <foreach collection="typename" item="typename" index="index"  open="(" close=")" separator=",">
+                                          #{typename}
+                                   </foreach>
+                               )
+              </if>
+              <if test=" uid != 0 and friendcheck == null">
+                     and u.uid = #{uid}
+              </if>
+              <if test=" missionid != 0 ">
+                     and umi.missionid = #{missionid}
+              </if>
+              <if test=" missiontype != null ">
+                     and mt.name = #{missiontype}
+              </if>
+              <if test="passflag eq 'N'.toString() ">
+                     and umi.passflag in ('N','P')
+              </if>
+              <if test="passflag eq 'Y'.toString() ">
+                     and umi.passflag = #{passflag}
+              </if>
+              <if test=" teamid != 0 ">
+                     and u.uid in
+                     (
+                     select tm.uid
+                     from team t,
+                          teammember tm
+                     where t.teamid = tm.teamid
+                     and tm.authority='MEMBER'
+                     and t.teamid = #{teamid}
+                     )
+              </if>
+              <if test="instructorid !=0">
+                     and u.uid in
+                     (
+                     select tm.uid
+                     from team t,
+                          teammember tm
+                     where t.teamid = tm.teamid
+                     and tm.authority='MEMBER'
+                     and t.instructorid = #{instructorid}
+                     )
+              </if>
+              <if test="friendcheck eq 'Y'.toString() ">
+                     and umi.uid in
+                     (
+                     select uid
+                     from (
+                     select uf.resuid as uid
+                     from user_friend_apply uf
+                     where uf.flag='ACCEPT'
+                     and uf.requid = #{uid}
+                     union all
+                     select uf.requid as uid
+                     from user_friend_apply uf
+                     where uf.flag='ACCEPT'
+                     and uf.resuid = #{uid}
+                     ) temp_table
+
+                     )
+              </if>
+              order by umi.creationdate desc limit #{limit} offset #{offset}
+       </select>
+
+</mapper>

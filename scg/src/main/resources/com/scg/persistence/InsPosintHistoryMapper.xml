@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.scg.persistence.InsPosintHistoryMapper">
+
+    <insert id="savePointHistory" parameterType="com.scg.model.InstructorPointHistory">
+          INSERT INTO instructor_point_history
+            (
+            instructorid,
+            teamvideopoint,
+            teamwordpoint,
+            pubvideopoint,
+            pubwordpoint,
+            teampasspoint,
+            pubpasspoint,
+            teamjoinpoint,
+            creationdate,
+            updatedate
+            )
+            VALUES
+            (
+            #{instructorid},
+            #{teamvideopoint},
+            #{teamwordpoint},
+            #{pubvideopoint},
+            #{pubwordpoint},
+            #{teampasspoint},
+            #{pubpasspoint},
+            #{teamjoinpoint},
+            now(),
+            now()
+            )
+    </insert>
+
+    <update id="updatePointHistory" parameterType="com.scg.model.InstructorPointHistory">
+      upadte instructor_point_history set
+        <if test="teamvideopoint != 0">teamvideopoint = #{teamvideopoint},</if>
+        <if test="teamwordpoint != 0">teamwordpoint = #{teamwordpoint},</if>
+        <if test="pubvideopoint != 0">pubvideopoint = #{pubvideopoint},</if>
+        <if test="pubwordpoint != 0">pubwordpoint = #{pubwordpoint},</if>
+        <if test="teampasspoint != 0">teampasspoint = #{teampasspoint},</if>
+        <if test="pubpasspoint != 0">pubpasspoint = #{pubpasspoint},</if>
+        updatedate = now()
+      where instructorid = #{instructorid}
+    </update>
+
+    <select id="getPointHis" parameterType="int" resultType="com.scg.model.InstructorPointHistory">
+        select *
+        from instructor_point_history
+        where instructorid = #{param1}
+    </select>
+
+    <select id="getPointHisList" parameterType="int" resultType="com.scg.model.InstructorPointHistory">
+        select *
+        from instructor_point_history
+        where instructorid = #{param1}
+    </select>
+
+</mapper>

@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.scg.persistence.CommonLookupMapper">
+
+       <select id="getMissionCategoryList" parameterType="com.scg.model.MissionCategory" resultType="com.scg.model.MissionCategory">
+              select *
+              from mission_category
+              where 1=1
+              <if test="categoryid != 0">
+                     and categoryid = #{categoryid}
+              </if>
+              <if test="name != null">
+                     and name = #{name}
+              </if>
+              <if test="enabled != null">
+                     and enabled = #{enabled}
+              </if>
+       </select>
+
+       <insert id="createMissionCategory" parameterType="com.scg.model.MissionCategory">
+              INSERT INTO mission_category
+              (
+              name,
+              description,
+              enabled,
+              creationdate,
+              lastupdate)
+              VALUES
+              (
+              #{name},
+              #{description},
+              #{enabled},
+              now(),
+              now()
+              );
+              <selectKey keyProperty="categoryid" resultType="Integer" order="AFTER">
+                     SELECT LAST_INSERT_ID()
+              </selectKey>
+       </insert>
+
+       <update id="updateMissionUpdate" parameterType="com.scg.model.MissionCategory">
+              update mission_category
+              <set>
+                     <if test="name != null">name = #{name},</if>
+                     <if test="description != null">description = #{description},</if>
+                     <if test="enabled != null">enabled = #{enabled}</if>
+                     <if test="lastupdate != null">lastupdate = now()</if>
+              </set>
+              where 1=1
+              <if test="categoryid != 0">
+                     and   categoryid = #{categoryid}
+              </if>
+       </update>
+
+       <delete id="deleteMissionCategory" parameterType="int">
+              DELETE from mission_category
+              where categoryid = #{param1}
+       </delete>
+
+       <delete id="deleteMissionType" parameterType="int">
+              delete from mission_type
+              where typeid=#{param1}
+       </delete>
+
+       <insert id="createMissionType" parameterType="com.scg.model.MissionType">
+              INSERT INTO mission_type
+              (
+              name,
+              description,
+              enabled,
+              creationdate,
+              lastupdate)
+              VALUES
+              (
+              #{name},
+              #{description},
+              #{enabled},
+              now(),
+              now()
+              );
+              <selectKey keyProperty="typeid" resultType="Integer" order="AFTER">
+                     SELECT LAST_INSERT_ID()
+              </selectKey>
+       </insert>
+
+       <select id="getMissionType" resultType="com.scg.model.MissionType" parameterType="com.scg.model.MissionType">
+              select *
+              from mission_type
+              where 1=1
+              <if test="typeid != 0">
+                     and typeid = #{typeid}
+              </if>
+              <if test="name != null">
+                     and name = #{name}
+              </if>
+              <if test="enabled != null">
+                     and enabled = #{enabled}
+              </if>
+       </select>
+
+       <select id="getCategoryCode" resultType="com.scg.model.Lookup">
+              select name,
+                     categoryid as id
+              from mission_category
+              where enabled='Y'
+       </select>
+
+       <select id="getTypeCode" resultType="com.scg.model.Lookup">
+              select name,
+                     typeid as id
+              from mission_type
+              where enabled='Y'
+       </select>
+
+
+
+</mapper>

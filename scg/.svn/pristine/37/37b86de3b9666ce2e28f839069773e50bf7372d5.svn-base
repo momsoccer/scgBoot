@@ -1,0 +1,301 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.scg.persistence.MissionMapper">
+
+    <select id="MissionList" parameterType="com.scg.model.QueryMission" resultType="com.scg.model.Mission">
+        select ty.name as typename,
+        mi.*,
+        pt.getpoint,
+        pt.escapepoint,
+        (
+        select count(*)
+        from mission_open_history moh
+        where moh.uid = #{uid}
+        and   moh.missionid= mi.missionid
+        ) opencount,
+        (
+        select count(*)
+        from usermission um
+        where um.missionid = mi.missionid
+        and   um.uid =  #{uid}
+        ) uploadcount,
+        (
+        select count(*)
+        from usermission um
+        where um.missionid = mi.missionid
+        and   um.passflag='Y'
+        and   um.uid =  #{uid}
+        ) missionpasscount
+        ,enname
+        ,endescription
+        ,enprecon
+        ,cnname
+        ,cndescription
+        ,cnprecon
+        from mission mi,
+        mission_type ty,
+        pointmanagement pt
+        where ty.typeid = mi.typeid
+        and   mi.missionid = pt.missionid
+        <if test="categoryid != 0">
+            and mi.categoryid = #{categoryid}
+        </if>
+        <if test="typeid != 0">
+            and mi.typeid = #{typeid}
+        </if>
+        <if test="missionname != null">
+            and mi.missionname = #{missionname}
+        </if>
+        <if test="enabled != null">
+            and mi.enabled = #{enabled}
+        </if>
+        <if test="youtubeaddr != null">
+            and mi.youtubeaddr = #{youtubeaddr}
+        </if>
+        <if test="typename != null">
+            and ty.name = #{typename}
+        </if>
+        order by sequence DESC
+    </select>
+
+    <select id="getMission" parameterType="com.scg.model.Mission" resultType="com.scg.model.Mission">
+        select ty.name as typename,
+        mi.*,
+        pt.getpoint,
+        pt.escapepoint,
+        (
+        select count(*)
+        from mission_open_history moh
+        where moh.uid = #{uid}
+        and   moh.missionid= mi.missionid
+        ) opencount,
+        (
+        select count(*)
+        from usermission um
+        where um.missionid = mi.missionid
+        and   um.uid =  #{uid}
+        ) uploadcount,
+        (
+        select count(*)
+        from usermission um
+        where um.missionid = mi.missionid
+        and   um.passflag='Y'
+        and   um.uid =  #{uid}
+        ) as missionpasscount
+        ,enname
+        ,endescription
+        ,enprecon
+        ,cnname
+        ,cndescription
+        ,cnprecon
+        from mission mi,
+        mission_type ty,
+        pointmanagement pt
+        where ty.typeid = mi.typeid
+        and   mi.missionid = pt.missionid
+        <if test="missionid != 0">
+            and mi.missionid = #{missionid}
+        </if>
+        <if test="categoryid != 0">
+            and mi.categoryid = #{categoryid}
+        </if>
+        <if test="typeid != 0">
+            and mi.typeid = #{typeid}
+        </if>
+        <if test="missionname != null">
+            and mi.missionname = #{missionname}
+        </if>
+        <if test="enabled != null">
+            and mi.enabled = #{enabled}
+        </if>
+        <if test="youtubeaddr != null">
+            and mi.youtubeaddr = #{youtubeaddr}
+        </if>
+        LIMIT 1
+    </select>
+
+    <insert id="saveMission" parameterType="com.scg.wep.vo.MissionRegisterVo">
+        INSERT INTO mission
+        (
+        categoryid,
+        typeid,
+        sequence,
+        missionname,
+        description,
+        precon,
+        videoaddr,
+        fullyoutubeaddr,
+        youtubeaddr,
+        enabled,
+        feetype,
+        grade,
+        passgrade,
+        creationdate,
+        updatedate
+        )
+        VALUES
+        (
+        #{categoryid},
+        #{typeid},
+        #{sequence},
+        #{missionname},
+        #{description},
+        #{precon},
+        #{videoaddr},
+        #{fullyoutubeaddr},
+        #{youtubeaddr},
+        #{enabled},
+        #{feetype},
+        #{grade},
+        #{passgrade},
+        now(),
+        now()
+        )
+        <selectKey keyProperty="missionid" resultType="Integer" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+
+
+    <select id="getMissionEvalList" parameterType="com.scg.model.MissionEval" resultType="com.scg.model.MissionEval">
+        select *
+        from mission_eval me
+        where 1=1
+        <if test="evalid != 0">
+            and me.evalid = #{evalid}
+        </if>
+        <if test="missionid != 0">
+            and me.missionid = #{missionid}
+        </if>
+        <if test="uid != 0">
+            and me.uid = #{uid}
+        </if>
+        <if test="comment != null">
+            and me.comment like CONCAT('%',#{comment},'%')
+        </if>
+        <if test="userscore != 0">
+            and me.userscore = #{userscore}
+        </if>
+    </select>
+
+    <select id="getMissionEval" parameterType="com.scg.model.MissionEval" resultType="com.scg.model.MissionEval">
+        select *
+        from mission_eval me
+        where 1=1
+        <if test="evalid != 0">
+            and me.evalid = #{evalid}
+        </if>
+        <if test="missionid != 0">
+            and me.missionid = #{missionid}
+        </if>
+        <if test="uid != 0">
+            and me.uid = #{uid}
+        </if>
+        <if test="comment != null">
+            and me.comment like CONCAT('%',#{comment},'%')
+        </if>
+        <if test="userscore != 0">
+            and me.userscore = #{userscore}
+        </if>
+        LIMIT 1
+    </select>
+
+
+    <insert id="saveMissionEval" parameterType="com.scg.model.MissionEval">
+        INSERT INTO mission_eval
+        (
+        missionid,
+        uid,
+        comment,
+        userscore,
+        creationdate
+        )
+        VALUES
+        (
+        #{missionid},
+        #{uid},
+        #{commentv},
+        #{userscore},
+        now()
+        );
+        <selectKey keyProperty="evalid" resultType="Integer" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+
+    <select id="getMissionType" resultType="com.scg.model.web.MissionTypeVo">
+        select mi.typeid,mt.previewimg,mt.description,
+               mt.name as missiontype,
+               count(*) as missioncount,
+               (
+               select count(*)
+               from usermission umi,
+                    mission smi
+               where umi.missionid = smi.missionid
+               and smi.typeid = mt.typeid
+               ) as usercount
+        from mission_type mt,
+             mission mi
+        where mt.typeid = mi.typeid
+        group by mt.name,mi.typeid,mt.previewimg,mt.description
+        order by mi.typeid
+    </select>
+
+
+    <select id="getWebMissionList" parameterType="com.scg.model.QueryMission" resultType="com.scg.model.Mission">
+        select ty.name as typename,
+        mi.*,
+        pt.getpoint,
+        pt.escapepoint,
+        (
+        select count(*)
+        from mission_open_history moh
+        where moh.uid = #{uid}
+        and   moh.missionid= mi.missionid
+        ) opencount,
+        (
+        select count(*)
+        from usermission um
+        where um.missionid = mi.missionid
+        and   um.uid =  #{uid}
+        ) uploadcount,
+        (
+        select count(*)
+        from usermission um
+        where um.missionid = mi.missionid
+        and   um.passflag='Y'
+        and   um.uid =  #{uid}
+        ) missionpasscount
+        ,enname
+        ,endescription
+        ,enprecon
+        ,cnname
+        ,cndescription
+        ,cnprecon
+        from mission mi,
+        mission_type ty,
+        pointmanagement pt
+        where ty.typeid = mi.typeid
+        and   mi.missionid = pt.missionid
+        <if test="categoryid != 0">
+            and mi.categoryid = #{categoryid}
+        </if>
+        <if test="typeid != 0">
+            and mi.typeid = #{typeid}
+        </if>
+        <if test="missionname != null">
+            and mi.missionname = #{missionname}
+        </if>
+        <if test="enabled != null">
+            and mi.enabled = #{enabled}
+        </if>
+        <if test="youtubeaddr != null">
+            and mi.youtubeaddr = #{youtubeaddr}
+        </if>
+        <if test="typename != null">
+            and ty.name = #{typename}
+        </if>
+        order by sequence asc
+    </select>
+
+</mapper>

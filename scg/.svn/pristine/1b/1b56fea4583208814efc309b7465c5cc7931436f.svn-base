@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.scg.persistence.MissionGenderMapper">
+
+<select id="getMissionGenderList" parameterType="com.scg.model.MissionGender" resultType="com.scg.model.MissionGender">
+select gender,
+       gendername
+from   missiongender;
+</select>
+
+<insert id="saveMissionGender" parameterType="com.scg.model.MissionGender">
+insert into missiongender (gender,
+                           gendername
+)
+values (#{gender},
+        #{gendername}
+)
+on duplicate key 
+update gendername = #{gendername};
+</insert>
+
+<delete id="deleteMissionGender" parameterType="com.scg.model.MissionGender">
+delete from missiongender
+where  gender = #{gender};
+</delete>
+
+</mapper>

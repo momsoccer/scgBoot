@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.scg.persistence.InsVideoMapper">
+
+       <insert id="saveVideo" parameterType="com.scg.insvideoboard.InsVideoVo">
+              INSERT INTO ins_video_board
+              (
+              instructorid,
+              subject,
+              content,
+              youtubeaddr,
+              teamid,
+              filename,
+              creationdate
+              )
+              VALUES
+              (
+              #{instructorid},
+              #{subject},
+              #{content},
+              #{youtubeaddr},
+              #{teamid},
+              #{filename},
+              now()
+              );
+       </insert>
+
+       <select id="getVideoList" parameterType="com.scg.insvideoboard.InsVideoVo" resultType="com.scg.insvideoboard.InsVideoVo">
+              select ins.name as insname,
+              ins.profileimgurl as insimage,
+              (
+              select name
+              from team t
+              where t.instructorid = ins.instructorid
+              ) as teamname,
+              (
+              select count(*)
+              from ins_video_like ivl
+              where ivl.videoid = ivd.videoid
+              ) as likecount,
+              (
+              select count(*)
+              from ins_video_board_line line
+              where line.videoid = ivd.videoid
+              ) as commentcount,
+              ivd.*
+              from ins_video_board ivd,
+              instructor ins
+              where ivd.instructorid = ins.instructorid
+              <if test="instructorid != 0">
+                     and ivd.instructorid = #{instructorid}
+              </if>
+              <if test="subject != null">
+                     and ivd.subject = #{subject}
+              </if>
+              order by creationdate desc limit #{limit} offset #{offset}
+       </select>
+
+       <delete id="deleteVideo" parameterType="com.scg.insvideoboard.InsVideoVo">
+              delete from ins_video_board where videoid = #{videoid}
+       </delete>
+
+       <select id="getVideo" parameterType="com.scg.insvideoboard.InsVideoVo" resultType="com.scg.insvideoboard.InsVideoVo">
+              select ins.name as insname,
+                     ins.profileimgurl as insimage,
+                     (
+                     select name
+                     from team t
+                     where t.instructorid = ins.instructorid
+                     ) as teamname,
+                     (
+                     select count(*)
+                     from ins_video_like ivl
+                     where ivl.videoid = ivd.videoid
+                     ) as likecount,
+                                   (
+              select count(*)
+              from ins_video_board_line line
+              where line.videoid = ivd.videoid
+              ) as commentcount,
+                     ivd.*
+              from ins_video_board ivd,
+                   instructor ins
+              where ivd.instructorid = ins.instructorid
+              and ivd.videoid = #{videoid}
+       </select>
+
+       <insert id="saveVideoLike" parameterType="com.scg.insvideoboard.InsVideoLikeVo">
+              INSERT INTO ins_video_like
+              (
+              uid,
+              videoid,
+              creationdate)
+              VALUES
+              (
+              #{uid},
+              #{videoid},
+              now()
+              )
+       </insert>
+
+       <delete id="deleteVideoLike" parameterType="com.scg.insvideoboard.InsVideoLikeVo">
+              delete from ins_video_like
+              where 1=1
+              <if test="videoid != 0">
+                     and videoid = #{videoid}
+              </if>
+              <if test="uid !=0 ">
+                     and uid = #{uid}
+              </if>
+
+       </delete>
+
+       <select id="getLikeVideoCount" parameterType="int" resultType="int">
+              select count(*)
+              from ins_video_like il
+              where il.uid = #{param1}
+              and   il.videoid=#{param2}
+       </select>
+
+       <select id="getVideoLikeList" parameterType="int" resultType="com.scg.insvideoboard.InsVideoLikeVo">
+              select il.*,
+                     u.username,
+                     (
+                     select t.name
+                     from team t,
+                          teammember tm
+                     where t.teamid = tm.teamid
+                     and tm.uid = il.uid
+                     ) as teamname,
+                     (
+                     select tm.teamid
+                     from teammember tm
+                     where tm.uid = il.uid
+                     ) as teamname,
+                     (
+                     select sum(umi.grade + umi.passgrade)
+                     from usermission umi
+                     where umi.uid = il.uid
+                     ) as totalscore,
+                     u.profileimgurl as userimage
+              from ins_video_like il,
+                   user u
+              where il.uid = u.uid
+              and il.videoid = #{param1}
+       </select>
+
+       <insert id="saveLine" parameterType="com.scg.insvideoboard.InsVideoVoLine">
+        INSERT INTO ins_video_board_line
+              (
+              videoid,
+              comment,
+              uid,
+              creationdate
+              )
+              VALUES
+              (
+              #{videoid},
+              #{comment},
+              #{uid},
+              now()
+              )
+       </insert>
+
+       <select id="getLineList" parameterType="int" resultType="com.scg.insvideoboard.InsVideoVoLine">
+              select u.username,
+                     u.profileimgurl as userimage,
+                     (
+                     select sum(umi.grade + umi.passgrade)
+                     from usermission umi
+                     where umi.uid = line.uid
+                     ) as totalscore,
+                     line.*
+              from ins_video_board_line line,
+                   user u
+              where line.uid = u.uid
+              and   line.videoid = #{param1}
+       </select>
+
+       <delete id="deleteLine" parameterType="com.scg.insvideoboard.InsVideoVoLine">
+        delete from ins_video_board_line
+        where 1=1
+        <if test="videoid != 0">
+               and videoid = #{videoid}
+        </if>
+              <if test="lineid != 0">
+                     and lineid = #{lineid}
+              </if>
+
+       </delete>
+
+</mapper>

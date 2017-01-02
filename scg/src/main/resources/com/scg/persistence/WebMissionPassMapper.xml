@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.scg.persistence.WebMissionPassMapper">
+
+
+
+
+       <select id="getMissionPassList" parameterType="com.scg.wep.vo.MissionPassVo" resultType="com.scg.wep.vo.MissionPassVo">
+              select (
+                     select t.name
+                     from team t,
+                     teammember tm
+                     where tm.teamid = t.teamid
+                     and tm.uid = ump.uid
+                     and tm.authority='MEMBER'
+                     ) as teamname,
+              u.username,
+              mt.description as missiontypename,
+              mi.missionname,
+              mi.description,
+              mi.precon,
+              mi.missionid,
+              mi.videoaddr,
+              mi.youtubeaddr,
+              ump.inscomment,
+              ump.status,
+              ump.passflag,
+              umi.usermissionid,
+              umi.youtubeaddr as useryoutubeaddr,
+              umi.videoaddr as uservideoaddr,
+              ump.passid,
+              ump.seq,
+              ump.creationdate
+              from user_mission_pass ump,
+                   mission mi,
+                   mission_type mt,
+              user u,
+              usermission umi
+              where 1=1
+              and   ump.missionid = mi.missionid
+              and   ump.uid = u.uid
+              and   mt.typeid = mi.typeid
+              and   ump.usermissionid = umi.usermissionid
+              and   ump.status='REQUEST'
+              order by ump.creationdate desc
+       </select>
+
+       <select id="getMissionPass" parameterType="int" resultType="com.scg.wep.vo.MissionPassVo">
+              select (
+              select t.name
+              from team t,
+              teammember tm
+              where tm.teamid = t.teamid
+              and tm.uid = ump.uid
+              and tm.authority='MEMBER'
+              ) as teamname,
+              u.username,
+              mt.description as missiontypename,
+              mi.missionname,
+              mi.missionid,
+              mi.description,
+              mi.precon,
+              mi.videoaddr,
+              mi.youtubeaddr,
+              ump.inscomment,
+              ump.status,
+              ump.passflag,
+              umi.usermissionid,
+              umi.youtubeaddr as useryoutubeaddr,
+              umi.videoaddr as uservideoaddr,
+              ump.passid,
+              ump.seq,
+              ump.creationdate,
+              ump.uid
+
+              from user_mission_pass ump,
+                   mission mi,
+                   mission_type mt,
+                   user u,
+                   usermission umi
+              where 1=1
+              and   ump.missionid = mi.missionid
+              and   ump.uid = u.uid
+              and   mt.typeid = mi.typeid
+              and   ump.usermissionid = umi.usermissionid
+              and   ump.status='REQUEST'
+              and   ump.passid = #{passid}
+       </select>
+
+       <select id="getUserMissionList" resultType="com.scg.wep.vo.MissionPassVo">
+              select umi.uid,
+                     u.username,
+                     umi.usermissionid,
+                     umi.videoaddr as uservideoaddr,
+                     umi.youtubeaddr as useryoutubeaddr,
+                     mi.videoaddr,
+                     mi.youtubeaddr,
+                     umi.creationdate,
+                     umi.missionid
+              from usermission umi,
+                   user u,
+                   mission mi
+              where 1=1
+              and umi.missionid = mi.missionid
+              and umi.uid = u.uid
+              and umi.passflag='N'
+       </select>
+
+       <select id="getData" resultType="com.scg.wep.vo.MissionPassVo" parameterType="int">
+                            select umi.uid,
+                     u.username,
+                     umi.usermissionid,
+                     umi.videoaddr as uservideoaddr,
+                     umi.youtubeaddr as useryoutubeaddr,
+                     mi.videoaddr,
+                     mi.youtubeaddr,
+                     umi.creationdate,
+                     umi.missionid
+              from usermission umi,
+                   user u,
+                   mission mi
+              where 1=1
+              and umi.missionid = mi.missionid
+              and umi.uid = u.uid
+              and umi.passflag='N'
+              and umi.usermissionid = #{param1}
+       </select>
+
+</mapper>

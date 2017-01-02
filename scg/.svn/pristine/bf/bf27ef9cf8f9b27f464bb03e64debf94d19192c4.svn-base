@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.scg.persistence.MissionHistoryMapper">
+
+       <insert id="saveHistory" parameterType="com.scg.model.Common.MissionHistory">
+              INSERT INTO mission_open_history
+              (
+              uid,
+              missionid,
+              escapepoint,
+              date,
+              opentype
+              )
+              VALUES
+              (
+              #{uid},
+              #{missionid},
+              #{escapepoint},
+              now(),
+              #{opentype}
+              );
+       </insert>
+
+       <select id="getMissionHistoryCount" parameterType="com.scg.model.Common.MissionHistory" resultType="int">
+              select count(*)
+              from mission_open_history
+              where 1=1
+              <if test="uid != 0">
+                     and uid = #{uid}
+              </if>
+              <if test="missionid != 0">
+                     and missionid = #{missionid}
+              </if>
+              <if test="opentype != null">
+                     and opentype = #{opentype}
+              </if>
+       </select>
+
+</mapper>

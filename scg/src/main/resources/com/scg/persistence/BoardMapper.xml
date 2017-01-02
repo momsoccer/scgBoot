@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.scg.persistence.BoardMapper">
+
+       <insert id="saveBoard" parameterType="com.scg.model.Board">
+              INSERT INTO board
+              (
+              usermissionid,
+              uid,
+              comment,
+              writeuid,
+              creationdate,
+              updatedate
+              )
+              VALUES
+              (
+              #{usermissionid},
+              #{uid},
+              #{comment},
+              #{writeuid},
+              now(),
+              now()
+              )
+       </insert>
+
+       <delete id="deleteBoard" parameterType="int">
+              DELETE from board
+              where boardid = #{param1}
+       </delete>
+
+       <update id="updateBoard" parameterType="com.scg.model.Board">
+              update board set
+              comment = #{comment},
+              updatedate = now()
+              where  1=1
+              <if test="boardid != 0">
+                     and boardid = #{boardid}
+              </if>
+              <if test="writeuid != 0">
+                     and writeuid = #{writeuid}
+              </if>
+              <if test="uid != 0">
+                     and uid = #{uid}
+              </if>
+       </update>
+
+       <select id="getBoardList" parameterType="com.scg.model.Board" resultType="com.scg.model.Board">
+              select bd.*,
+              ur.username,
+              ur.profileimgurl,
+              (
+              select t.name
+              from team t,
+                   teammember tm
+              where t.teamid = tm.teamid
+              and   tm.uid = ur.uid
+              ) as teamname,
+              (
+              select sum(um.grade +
+              case when um.passflag='Y' then
+              um.passgrade
+              else
+              0 end
+              )
+              from usermission um
+              where um.uid = ur.uid
+              ) as totalscore,
+              (
+              select mt.name
+              from mission mi,
+              mission_type mt,
+              usermission umi
+              where mi.missionid = umi.missionid
+              and mi.typeid = mt.typeid
+              and umi.usermissionid = bd.usermissionid
+              ) as missiontype
+              from board bd,user  ur
+              where bd.writeuid = ur.uid
+              <if test="boardid != 0">
+                     and bd.boardid = #{boardid}
+              </if>
+              <if test="uid != 0">
+                     and bd.uid = #{uid}
+              </if>
+              <if test="writeuid != 0">
+                     and bd.writeuid = #{writeuid}
+              </if>
+              <if test="usermissionid != 0">
+                     and bd.usermissionid = #{usermissionid}
+              </if>
+              order by bd.boardid desc
+       </select>
+
+       <select id="getTestBoardList" resultType="com.scg.model.Board">
+              select *
+              from board;
+       </select>
+
+</mapper>

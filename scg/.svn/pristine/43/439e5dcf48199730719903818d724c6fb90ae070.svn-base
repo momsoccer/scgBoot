@@ -1,0 +1,61 @@
+@charset "utf-8";
+@import url("http://fonts.googleapis.com/earlyaccess/nanumgothic.css");
+@import url("https://fonts.googleapis.com/css?family=Archivo+Black");
+
+/* 폰트 */
+@font-face {font-family:'Nanum'; src:url('/font/nanum.eot'); src:url('/font/nanum.eot?#iefix') format('embedded-opentype'), url('/font/nanum.woff') format('woff'), url('/font/nanum.ttf') format('truetype'); font-weight:normal; font-style:normal; }
+@font-face {font-family:'NanumBold';src:url('/font/nanum_bold.eot'); src:url('/font/nanum_bold.eot?#iefix') format('embedded-opentype'), url('/font/nanum_bold.woff') format('woff'), url('/font/nanum_bold.ttf') format('truetype'); font-weight:bold; font-style:normal; }
+
+/* Reset CSS
+ * --------------------------------------- */
+html,body{width:100%;  height:100%;line-height: 150%; font-family:"Nanum", Dotum, Sans-serif; font-weight:normal;}
+html{ overflow-x:hidden}
+body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,form,fieldset,p,button{margin:0;padding:0}
+body,h1,h2,h3,h4{	font-size:14px;color:#383d41;font-weight:400;  }
+input,button,textarea, select{	 font-size:14px; font-family:"Nanum", Dotum, Sans-serif;  font-weight:normal;  }
+body h2,body h3{font-family: 'Archivo Black',sans-serif;}
+
+body{*word-break:break-all;-ms-word-break:break-all; -webkit-text-size-adjust:none; word-break:keep-all;}
+img,fieldset,iframe{border:0 none}
+li{list-style:none}
+input,select,button{vertical-align:middle;  }
+img{vertical-align:top}
+i,em,address{font-style:normal}
+label,button{cursor:pointer}
+button{margin:0;padding:0}
+a{color:#444;text-decoration:none}
+a:hover{color:#111}
+
+/* Custom CSS
+ * --------------------------------------- */
+.wrap{margin-left: auto;margin-right: auto;width: 960px;position: relative;}
+#menu{position:fixed;top:0;left:0;height: 66px;z-index: 70;width: 100%;padding: 0;margin:0;}
+
+/* Sections
+ * --------------------------------------- */
+#myVideo{position: absolute;right: 0;	bottom: 0;top:0;right:0;width: 100%;height: 100%;background-size: 100% 100%;background-color: black; /* in case the video doesn't fit the whole page*/background-image: /* our video */;	background-position: center center;	background-size: contain;object-fit: cover; /*cover video background */z-index:3;}
+
+/*Header*/
+#header {background:#d94b16;  height: 66px; min-width: 1024px; position: relative; width: 100%; z-index: 10;}
+#header h1 { left: 20px; position: absolute; top: 16px;}
+#header h1 img { vertical-align: top;}
+#header .level_list { text-align: center;}
+#header .level_list li { display: inline-block; margin: 0 -1px; width:66px;}
+#header .level_list a {border-right: 1px solid #f5918a; color: #faccc9; display: block;font-size: 20px; height: 66px;line-height: 66px; text-align: center; width:68px;}
+#header .level_list li:first-child a {border-left: 1px solid #f5918a;}
+#header .level_list a:hover, #header .level_list .active a { background: #fff none repeat scroll 0 0; border-color: #fff; color: #f0564c;}
+.fix_menu { background: #1e1e1c; bottom: 0; height: 50px;line-height: 50px;text-align:center; min-width: 1024px; position: fixed; width: 100%;font-size:11px; z-index: 999; color:#aaa}
+.fullpage-bg{background: url('../img/bg.png'); z-index:4;width: 100%; height:100%;position:absolute;left:0; top:0}
+.section{text-align:center}
+.section1{background: url('../img/section01_bg.png') no-repeat center center; background-size:cover;}
+.section2{background: url('../img/section02_bg.png') no-repeat center center; background-size:cover;}
+/*.fp-tableCell{background: url('../img/bg.png') repeat 0 0; }*/
+.section h2{color: #fff;display: inline-block; font-size: 40px;font-weight: bold;line-height: 70px; margin-bottom: 18px; padding-bottom: 0;background: url('../img/division.png') no-repeat center bottom;}
+.section .intro{z-index:5}
+.section .intro p{color:#fff;margin-bottom:40px}
+.section .list{display:inline-block;}
+.section .list li{float:left;color:#fff;display:inline;margin:0 40px;height:300px}
+.section .list li h3{font-family:"Nanum", Dotum, Sans-serif; font-size:18px;font-weight:bold;color:#fff;margin:20px 0 10px}
+.section .list li p{margin:0}
+.section .team span{position:relative;display:block;}
+.section .team span strong{display:block;width:100%;height:136px;position:absolute;left:0;top:0;line-height:220px}

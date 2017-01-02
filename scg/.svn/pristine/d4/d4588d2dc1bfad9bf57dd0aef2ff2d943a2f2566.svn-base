@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.scg.persistence.IndicatorServiceMapper">
+
+       <insert id="savedailyUser" parameterType="com.scg.model.UserDailyHistory">
+              INSERT INTO user_daily_history
+              (
+              uid,
+              description,
+              yyyymmdd,
+              creationdate
+              )
+              VALUES
+              (
+              #{uid},
+              #{description},
+              #{yyyymmdd},
+              now()
+              );
+              <selectKey keyProperty="dailyhistoryid" resultType="Integer" order="AFTER">
+                     SELECT LAST_INSERT_ID()
+              </selectKey>
+       </insert>
+
+       <select id="getdailycheck" resultType="int">
+              select count(*)
+              from user_daily_history
+              where uid = #{param1}
+              and   yyyymmdd=#{param2}
+       </select>
+
+       <select id="getPointList" resultType="com.scg.model.PointManagement">
+              select *
+              from point_type
+       </select>
+
+</mapper>

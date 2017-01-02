@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.scg.persistence.InsMapper">
+
+       <insert id="saveIns" parameterType="com.scg.ins.vo.InsApplyVo">
+              INSERT INTO instructor_apply
+              (
+              name,
+              age,
+              playeryear,
+              instructoryear,
+              bankname,
+              bankaccount,
+              address,
+              currentteamname,
+              career1,
+              career2,
+              career3,
+              career4,
+              career5,
+              resume,
+              uid,
+              phonenumber,
+              applystatus,
+              creationdate,
+              updatedate,
+              email,
+              teamimg,
+              momappteamname
+              )
+              VALUES
+              (
+              #{name},
+              #{age},
+              #{playeryear},
+              #{instructoryear},
+              #{bankname},
+              #{bankaccount},
+              #{address},
+              #{currentteamname},
+              #{career1},
+              #{career2},
+              #{career3},
+              #{career4},
+              #{career5},
+              #{resume},
+              #{uid},
+              #{phonenumber},
+              #{applystatus},
+              now(),
+              now(),
+              #{email},
+              #{teamimg},
+              #{momappteamname}
+              );
+       </insert>
+
+       <delete id="delete" parameterType="com.scg.ins.vo.InsApplyVo">
+        DELETE from instructor_apply where uid = #{uid}
+       </delete>
+
+
+       <update id="updateIns" parameterType="com.scg.ins.vo.InsApplyVo">
+              update instructor_apply set
+              <if test="name != null">
+                     name = #{name},
+              </if>
+              <if test="age != 0">
+                     age = #{age},
+              </if>
+              <if test="playeryear != 0">
+                     playeryear = #{playeryear},
+              </if>
+              <if test="instructoryear != 0">
+                     instructoryear = #{instructoryear},
+              </if>
+              <if test="instructorid != 0">
+                     instructorid = #{instructorid},
+              </if>
+              <if test="bankname != null">
+                     bankname = #{bankname},
+              </if>
+              <if test="bankaccount != null">
+                     bankaccount = #{bankaccount},
+              </if>
+              <if test="address != null">
+                     address = #{address},
+              </if>
+              <if test="currentteamname != null">
+                     currentteamname = #{currentteamname},
+              </if>
+              <if test="career1 != null">
+                     career1 = #{career1},
+              </if>
+              <if test="career2 != null">
+                     career2 = #{career2},
+              </if>
+              <if test="career3 != null">
+                     career3 = #{career3},
+              </if>
+              <if test="career4 != null">
+                     career4 = #{career4},
+              </if>
+              <if test="career5 != null">
+                     career5 = #{career5},
+              </if>
+              <if test="resume != null">
+                     resume = #{resume},
+              </if>
+              <if test="phonenumber != null">
+                     phonenumber = #{phonenumber},
+              </if>
+              <if test="applystatus != null">
+              applystatus = #{applystatus},
+              </if>
+              <if test="teamimg != null">
+                     teamimg = #{teamimg},
+              </if>
+              <if test="momappteamname != null">
+                     momappteamname = #{momappteamname},
+              </if>
+              <if test="email != null">
+                     email = #{email},
+              </if>
+              <if test="instructorid != 0">
+                     instructorid = #{instructorid},
+              </if>
+              updatedate = now()
+              where 1=1
+              and uid = #{uid}
+       </update>
+
+       <select id="getListIns" parameterType="com.scg.ins.vo.InsApplyVo" resultType="com.scg.ins.vo.InsApplyVo">
+              select *
+              from instructor_apply
+              where 1=1
+                <if test="uid != 0">
+                and uid = #{uid}
+                </if>
+              <if test="applystatus != null">
+                     and applystatus = #{applystatus}
+              </if>
+       </select>
+
+       <select id="getIns" parameterType="com.scg.ins.vo.InsApplyVo" resultType="com.scg.ins.vo.InsApplyVo">
+              select *
+              from instructor_apply
+              where 1=1
+              <if test="uid != 0">
+                     and uid = #{uid}
+              </if>
+              <if test="applystatus != null">
+                     and applystatus = #{applystatus}
+              </if>
+       </select>
+
+       <select id="getInsPointBalanceList" parameterType="int" resultType="com.scg.datadto.InsPointBalance">
+              select *
+              from (
+              select  'FEEDBACK' as balancetype,
+                      (
+                      select feedbacktype
+                      from feedback_header a
+                      where a.feedbackid = fl.feedbackid
+                      ) as feedbacktype,
+                      (
+                      select cashpoint
+                      from feedback_header a
+                      where a.feedbackid = fl.feedbackid
+                      ) as cashpoint,
+                      (
+                      select u.username
+                      from feedback_header a,
+                           user u
+                      where a.feedbackid = fl.feedbackid
+                      and u.uid = a.uid
+                      ) as username,
+                      (
+                      select u.profileimgurl
+                      from feedback_header a,
+                           user u
+                      where a.feedbackid = fl.feedbackid
+                      and u.uid = a.uid
+                      ) as userimge,
+                              (
+                      select mi.missionname
+                      from feedback_header a,
+                           mission mi
+                      where a.feedbackid = fl.feedbackid
+                      and a.missionid = mi.missionid
+                      ) as missionname,
+                      fl.evalscore,
+                      fl.creationdate,
+                      fl.calculateflag
+              from feedback_line fl
+              where 1=1
+              and fl.type='ins'
+              and fl.feedbacklineid in(
+                                      select sfl.feedbacklineid
+                                      from feedback_header sfh,
+                                           feedback_line sfl
+                                      where sfh.feedbackid = sfl.feedbackid
+                                      and sfh.instructorid= #{param1}
+                                      and sfh.cashpoint > 0
+                                      )
+              union all
+              select 'MISSIONPASS' as balancetype,
+                     'word' AS feedbacktype,
+                     ums.cashpoint,
+                     u.username,
+                     u.profileimgurl as userimge,
+                     (
+                     select mi.missionname
+                     from mission mi
+                     where mi.missionid = ums.missionid
+                     ) as missionname,
+                     0 as evalscore,
+                     ums.updatedate as creationdate,
+                     ums.calculateflag
+              from user_mission_pass ums,
+                   user u
+              where 1=1
+              and   ums.uid = u.uid
+              and   ums.status='SUCCESS'
+              and   ums.instructorid = #{param1}
+              ) teamp_table
+              order by  creationdate  desc
+       </select>
+
+</mapper>

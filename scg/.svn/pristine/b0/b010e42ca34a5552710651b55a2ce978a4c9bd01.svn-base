@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.scg.persistence.MissionAgeMapper">
+
+<select id="getMissionAgeList" parameterType="com.scg.model.MissionAge" resultType="com.scg.model.MissionAge">
+select age,
+       agefrom,
+       ageto
+from   missionage;
+</select>
+
+<insert id="saveMissionAge" parameterType="com.scg.model.MissionAge">
+insert into missionage (age,
+                        agefrom,
+                        ageto
+)
+values (#{age},
+        #{agefrom},
+        #{ageto}
+)
+on duplicate key 
+update agefrom = #{agefrom},
+       ageto   = #{ageto};
+</insert>
+
+<delete id="deleteMissionAge" parameterType="com.scg.model.MissionAge">
+delete from missionage
+where  age = #{age};
+</delete>
+
+</mapper>

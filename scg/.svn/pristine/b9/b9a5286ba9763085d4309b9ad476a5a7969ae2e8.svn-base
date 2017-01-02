@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.scg.persistence.SelfPointMapper">
+
+
+       <insert id="saveHeaderPoint" parameterType="com.scg.model.SpBalanceHeader">
+              INSERT INTO self_point_balance_header
+              (
+              uid,
+              amount,
+              updatedate)
+              VALUES
+              (
+               #{uid},
+               #{amount},
+               now()
+              );
+              <selectKey keyProperty="headerid" resultType="Integer" order="AFTER">
+                     SELECT LAST_INSERT_ID()
+              </selectKey>
+       </insert>
+
+       <update id="updateHeaderPoint">
+              update self_point_balance_header SET
+              amount = #{param3},
+              updatedate = now()
+              where headerid=#{param1}
+              AND uid=#{param2}
+       </update>
+
+       <insert id="saveLinePoint" parameterType="com.scg.model.SpBalanceLine">
+              INSERT INTO self_point_balance_line
+              (
+              headerid,
+              type,
+              previousamount,
+              inamount,
+              outamount,
+              lastamount,
+              description,
+              pointid,
+              missionid,
+              creationdate)
+              VALUES
+              (
+              #{headerid},
+              #{type},
+              #{previousamount},
+              #{inamount},
+              #{outamount},
+              #{lastamount},
+              #{description},
+              #{pointid},
+              #{missionid},
+              now()
+              );
+              <selectKey keyProperty="lineid" resultType="Integer" order="AFTER">
+                     SELECT LAST_INSERT_ID()
+              </selectKey>
+       </insert>
+
+       <select id="getLinePoint" parameterType="int" resultType="com.scg.model.SpBalanceLine">
+              select previousamount
+              from self_point_balance_line
+              where headerid = #{param1}
+              limit 1
+       </select>
+
+       <select id="getSelfPointAmount" resultType="com.scg.model.SpBalanceHeader" parameterType="com.scg.model.SpBalanceHeader">
+          select  headerid,
+                  amount,
+                  uid,
+                  updatedate
+          from self_point_balance_header
+          where uid=#{uid}
+       </select>
+
+       <select id="getPointInfo" resultType="com.scg.model.PointManagement" parameterType="com.scg.model.PointManagement">
+              select *
+              from pointmanagement pt
+              where 1=1
+              <if test="typecode != null">
+                     and pt.typecode = #{typecode}
+              </if>
+              <if test="lang != null">
+                     and pt.lang = #{lang}
+              </if>
+              <if test="enabled != null">
+                     and pt.enabled = #{enabled}
+              </if>
+              <if test="sign != null">
+                     and pt.sign = #{sign}
+              </if>
+       </select>
+
+       <select id="getPointTr" resultType="com.scg.model.Common.PointTrVo" parameterType="com.scg.model.Common.PointTrVo">
+              select *
+              from pointmanagement pt
+              where 1=1
+              <if test="missionid != 0">
+                     and pt.missionid = #{missionid}
+              </if>
+              <if test="typecode != null">
+                     and pt.typecode = #{typecode}
+              </if>
+              <if test="lang != null">
+                     and pt.lang = #{lang}
+              </if>
+              <if test="enabled != null">
+                     and pt.enabled = #{enabled}
+              </if>
+              <if test="sign != null">
+                     and pt.sign = #{sign}
+              </if>
+       </select>
+
+
+
+       <select id="getCashLineList" resultType="com.scg.model.SpBalanceLine" parameterType="int">
+              select spl.type as type,
+					 CASE spl.type
+                     when 'JOIN' then '가입기념 충전'
+                     when 'MISSION' then '미션오픈 사용'
+                     when 'FEEDBACK_REQ' then '피드백 사용'
+                     when 'EVENT' then '이벤트 충전'
+                     when 'EVAL' then '미션 심사 사용'
+                     when 'DAY' then '출석 체크 충전'
+                     when 'PUR' then '포인트 충전'
+                     when 'FEEDBACK_REQ_BACK' then '피드백 취소'
+                     end as pointtypedisp,
+                     spl.previousamount,
+                     spl.inamount,
+                     spl.outamount,
+                     spl.lastamount,
+                     spl.description,
+                     spl.creationdate
+              from  self_point_balance_header sph,
+                    self_point_balance_line spl
+              where sph.headerid = spl.headerid
+              and   sph.uid = #{uid}
+              order by spl.lineid desc
+       </select>
+
+
+
+
+</mapper>

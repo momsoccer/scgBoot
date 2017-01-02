@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.scg.persistence.MyBookMarkMapper">
+
+       <insert id="createMarck" parameterType="com.scg.model.MyBookMark">
+              insert into mybookmark
+              (
+              uid,
+              usermissionid,
+              creationdate
+              )
+              VALUES
+              (
+              #{uid},
+              #{usermissionid},
+              now()
+              )
+       </insert>
+
+       <delete id="deleteMarck" parameterType="com.scg.model.MyBookMark">
+              DELETE
+              from mybookmark
+              where 1=1
+              and uid = #{uid}
+              and usermissionid = #{usermissionid}
+       </delete>
+
+       <select id="getPickCount" parameterType="com.scg.model.MyBookMark" resultType="int">
+              select count(*)
+              from mybookmark
+              where 1=1
+              <if test="uid != 0">
+                     and uid = #{uid}
+              </if>
+              <if test="usermissionid != 0">
+                     and usermissionid = #{usermissionid}
+              </if>
+       </select>
+
+       <select id="getMyBookMark" parameterType="com.scg.model.MyBookMark" resultType="com.scg.model.UserMission">
+              select u.username,
+              u.profileimgurl,
+              umi.youtubeaddr,
+              (
+              select t.name
+              from team t, teammember tm
+              where t.teamid = tm.teamid
+              and   tm.uid = u.uid
+              ) as teamname,
+              (
+              select count(*)
+              from mybookmark book
+              where book.usermissionid = umi.usermissionid
+              ) as bookmarkcount,
+              (
+              select count(*)
+              from board bd
+              where bd.usermissionid= umi.usermissionid
+              and   bd.uid = umi.uid
+              ) boardcount,
+              umi.passflag,
+              umi.creationdate,
+              umi.updatedate,
+              1 mycheck,
+              umi.usermissionid,
+              umi.subject,
+              (
+              select mi.missionname
+              from mission mi
+              where mi.missionid=umi.missionid
+              ) as missionname,
+              (
+              select mt.name
+              from mission_type mt,
+              mission mi
+              where mt.typeid = mi.typeid
+              and mi.missionid = umi.missionid
+              ) as missiontype
+              from mybookmark bk,
+              usermission umi,
+              user u
+              where 1=1
+              and umi.usermissionid =  bk.usermissionid
+              and umi.uid = u.uid
+              <if test="uid != 0">
+                     and bk.uid = #{uid}
+              </if>
+       </select>
+
+       <select id="getMyBookMarkList" parameterType="com.scg.model.MyBookMark" resultType="com.scg.model.MyBookMark">
+              select mk.*,
+                     (
+                     select t.name
+                     from team t,
+                          teammember tm
+                     where t.teamid = tm.teamid
+                     and tm.uid = mk.uid
+                     limit 1
+                     ) as teamnname,
+                     (
+                     select sum(umi.grade +
+
+                                   case when umi.passflag='Y' then
+              umi.passgrade
+              else
+              0 end
+
+                     )
+                     from usermission umi
+                     where umi.uid = mk.uid
+                     ) as totalscore,
+                     u.username,
+                     u.profileimgurl as userimge
+              from mybookmark mk,
+                   user u
+              where mk.uid = u.uid
+              and mk.usermissionid = #{usermissionid}
+              order by mk.creationdate desc
+       </select>
+
+</mapper>

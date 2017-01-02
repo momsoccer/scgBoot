@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="Description" content="Man of the Match, MOM">
+<meta name="Keywords" content="MOM, 몸싸커, 축구교실, 축구레슨, 축구동영상, 스타트업">
+<title>MOM, Man of the Match</title>
+<link rel="stylesheet" type="text/css" href="css/common.css" />
+<link rel="stylesheet" type="text/css" href="css/default.css" />
+<link rel="stylesheet" type="text/css" href="css/motion.css" />
+<script type="text/javascript" charset="UTF-8" src="js/jquery-2.2.3.min.js"></script>
+<script type="text/javascript" charset="UTF-8" src="js/mobile-detect.min.js"></script>
+<script type="text/javascript" charset="UTF-8" src="js/imagesloaded.pkgd.min.js"></script>
+<script type="text/javascript" charset="UTF-8" src="js/common_n.js"></script>
+<script type="text/javascript" charset="UTF-8" src="js/gnb-main.js"></script>
+<script type="text/javascript" charset="UTF-8" src="js/main.js"></script>
+<script type="text/javascript" charset="UTF-8" src="js/common.function.js"></script>
+<script type="text/javascript" charset="UTF-8" src="js/jquery.transit.min.js"></script>
+</head>
+
+<body>
+<div id="skipNav">
+    <a href="#container"><span>본문 바로가기</span></a>
+</div>
+<!-- S : header -->
+    <header>
+        <div class="navi">
+            <h1><a href="/">MOM싸커</a></h1>
+			<div class="gnb">
+				<ul>
+					<li><span class="line"></span><a href="company.html" class="depth1">사업소개</a></li>
+					<li><span class="line"></span><a href="service.html" class="depth1">서비스</a></li>
+					<li><span class="line"></span><a href="gallery.html" class="depth1">갤러리</a></li>
+					<li><span class="line"></span><a href="people.html" class="depth1">사람들</a></li>
+				</ul>
+			</div>
+			<div class="navi-bg"><div class="white-bg"></div></div>
+			<a href="" class="menu-icon">전체메뉴 보기</a>
+			<div class="m-menu">
+				<div class="logo"><img src="images/common/logo_g.png" alt="MOM싸커" /></div>
+				<div class="m-menu-in">
+					<ul>
+						<li><a href="company.html" class="depth1">사업소개</a>
+						</li>
+						<li><a href="service.html" class="depth1">서비스</a>
+						</li>
+						<li><a href="gallery.html" class="depth1">갤러리</a>
+						</li>
+						<li><a href="people.html" class="depth1">사람들</a>
+					</ul>
+				</div>
+				<a href="" class="close"><img src="images/common/close.png" alt="닫기" /></a>
+			</div>
+
+        </div>
+    </header>
+<!-- E : header -->
+<div id="container" class="main">
+<form method="get" name="searchForm" id="searchForm" >
+<input type="hidden" id="idx" name="idx" />
+</form>
+	<section class="main-section">
+		<div class="roll">
+			<div class="roll-in r1">
+				<div class="roll-in-txt">
+					<span class="t_i">It's Fun World</span>
+					<span class="tit"><img src="images/main/m_text_mom.png" alt="MOM" /></span>
+					<span class="txt">지금까지 할 수 없었던 또 볼수 없었던<br />새로운 축구의 세상으로 안내합니다.</span>
+					<span class="more"><a href="#">Google Store</a></span>
+				</div>
+				<div class="dotbg"></div>
+				<div class="dim"></div>
+				<div class="img">
+					<video id="vod0" src="intro_sample.mp4" loop="true" style="width: 100%;"></video>
+					<img class="hidden-image" src="images/main/intro_i01.jpg" alt="" />
+					<img src="images/main/intro_i01.jpg" alt="" />
+				</div>
+			</div>
+			<div class="roll-in r2" style="z-index:10">
+				<div class="roll-in-txt">
+					<span class="tit">Online/Mobile Lesson</span>
+					<span class="txt">세계적인 수준의 축구 강사들의<br />유연한 커뮤니케이션을 통한 축구 미션</span>
+					<span class="more"><a href="service.html""><img src="images/main/more.png" alt="more" /></a></span>
+				</div>
+				<div class="dotbg"></div>
+				<div class="dim"></div>
+				<div class="img">
+					<video id="vod1" src="intro_sample02.mp4" loop="true" style="width: 100%;"></video>
+					<img src="images/main/intro_i02.jpg" alt="" />
+				</div>
+			</div>
+			<div class="roll-in r3" style="z-index:10">
+				<div class="roll-in-txt">
+					<span class="tit">Organized, Level </span>
+					<span class="txt">체계화된 레벨별 미션을 통한<br />축구 재미와 게임을 동시에!</span>
+					<span class="more"><a href="service.html""><img src="images/main/more.png" alt="more" /></a></span>
+				</div>
+				<div class="dotbg"></div>
+				<div class="dim"></div>
+				<div class="img">
+					<video id="vod1" src="intro_sample03.mp4" loop="true" style="width: 100%;"></video>
+					<img src="images/main/intro_i03.jpg" alt="" />
+				</div>
+			</div>
+	
+		</div>
+		<div class="bts">
+			<span class="mouse"><img src="images/main/mouse_icon.png" alt="마우스 스크롤" /></span>
+			<span class="bt1">
+				<a href="" class="on">구글 다운로드</a>
+				<a href="service.html">서비스 소개01</a>
+				<a href="service.html">서비스 소개02</a>
+			</span>
+			<span class="bt2">
+				<a href="" class="stop"></a>
+				<a href="" class="play on"></a>
+			</span>
+		</div>
+	</section>
+	
+	
+	<section class="m_visual">
+		<div class="main-tit">
+			<a href="service.html" class="visualbt visualbg01">
+				<span>M.O.M 서비스</span>
+				<span class="visualover">M.O.M 서비스</span>
+				<img src="images/main/more.png" alt="더보기" class="v_more" />
+			</a>
+			<a href="people.html" class="visualbt visualbg02">
+				<span>함께한 전문가들</span>
+				<span class="visualover">함께한 전문가들</span>
+				<img src="images/main/more.png" alt="더보기" class="v_more" />
+			</a>
+			<a href="gallery.html" class="visualbt visualbg03">
+				<span>M.O.M 갤러리</span>
+				<span class="visualover">M.O.M 갤러리</span>
+				<img src="images/main/more.png" alt="더보기" class="v_more" />
+			</a>
+			<ul>
+				<li class="visualbg01"></li>
+				<li class="visualbg02"></li>
+				<li class="visualbg03"></li>
+			</ul>
+		</div>
+	</section>
+</div>
+<!-- E : container -->
+<section class="link-area">
+	<div class="cont">
+		<p class="t">partnership cooperation</p>
+		<p class="i">M.O.M과 함께 더 많은 기회를 함께 하시고 싶으십니까?</p>
+		<a href="mailto:momsoccer@naver.com" class="mail">momsoccer@naver.com</a>
+		<div class="sns">
+			<a href="#" class="fb"><img src="images/common/sns_f.png" alt="페이스북"></a>
+			<a href="#" class="bg"><img src="images/common/sns_b.png" alt="블로그"></a>
+		</div>
+	</div>
+</section>
+<a href="" class="topbt"><img src="images/common/top.png" alt="top" /></a>
+<footer>
+	<div class="footer-in">
+		Copyright(c) m.o.m All Rights Reserved.
+	</div>
+</footer>
+
+</body>
+</html>

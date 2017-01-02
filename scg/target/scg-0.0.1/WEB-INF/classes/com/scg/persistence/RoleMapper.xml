@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.scg.persistence.RoleMapper">
+
+<select id="getRoleList" parameterType="com.scg.model.Role" resultType="com.scg.model.Role">
+select roleid,
+       rolename
+from   role;
+</select>
+
+<select id="getRole" parameterType="com.scg.model.Role" resultType="com.scg.model.Role">
+select roleid,
+       rolename
+from   role
+where  roleid = #{roleId};
+</select>
+
+<insert id="postRole" parameterType="com.scg.model.Role">
+insert into role (roleid,
+                  rolename
+)
+values (#{roleId},
+        #{roleName}
+);
+</insert>
+
+<update id="putRole" parameterType="com.scg.model.Role">
+update role
+set    rolename = #{roleName}
+where  roleid   = #{roleId};
+</update>
+
+<update id="deleteRole" parameterType="com.scg.model.Role">
+delete role
+where  roleid = #{roleId};
+</update>
+
+</mapper>

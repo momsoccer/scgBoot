@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.scg.persistence.PushMapper">
+
+       <select id="getAllUser" resultType="com.scg.model.User">
+              select ft.fcmtoken,
+                     u.*
+              from user u,
+                   fcm_token ft
+              where u.uid = ft.uid
+              and ft.fcmtoken is not null
+       </select>
+
+       <select id="getUserPush" parameterType="com.scg.model.User" resultType="com.scg.model.User">
+              select *
+              from (
+              select u.*,
+              t.name as teamname,
+              t.teamid as teamid,
+              ft.fcmtoken
+              from   user u,
+              fcm_token ft,
+              team t,
+              teammember tm
+              where u.uid = ft.uid
+              and  u.uid  = tm.uid
+              and  tm.teamid = t.teamid
+              and  tm.authority='MEMBER'
+              union all
+              select u.*,
+              t.name as teamname,
+              t.teamid as teamid,
+              ft.fcmtoken
+              from   user u,
+              fcm_token ft,
+              team t,
+              teammember tm
+              where u.uid = ft.uid
+              and  u.uid  = tm.uid
+              and  tm.teamid = t.teamid
+              and  tm.authority !='MEMBER'
+              ) temp_table
+              where 1=1
+              <if test="teamid != 0">
+                     and teamid = #{teamid}
+              </if>
+              <if test="uid != 0">
+                     and uid = #{uid}
+              </if>
+       </select>
+
+       <select id="getUserPushList" parameterType="com.scg.model.User" resultType="com.scg.model.User">
+              select *
+              from (
+              select u.*,
+              t.name as teamname,
+              t.teamid as teamid,
+              ft.fcmtoken
+              from   user u,
+              fcm_token ft,
+              team t,
+              teammember tm
+              where u.uid = ft.uid
+              and  u.uid  = tm.uid
+              and  tm.teamid = t.teamid
+              and  tm.authority='MEMBER'
+              union all
+              select u.*,
+              t.name as teamname,
+              t.teamid as teamid,
+              ft.fcmtoken
+              from   user u,
+              fcm_token ft,
+              team t,
+              teammember tm
+              where u.uid = ft.uid
+              and  u.uid  = tm.uid
+              and  tm.teamid = t.teamid
+              and  tm.authority !='MEMBER'
+              ) temp_table
+              where 1=1
+              <if test="teamid != 0">
+                     and teamid = #{teamid}
+              </if>
+              <if test="uid != 0">
+                     and uid = #{uid}
+              </if>
+       </select>
+
+       <select id="getInsPushList" parameterType="com.scg.model.Instructor" resultType="com.scg.model.Instructor">
+        select itc.*,
+               (select serialnumber from fcm_token where commontokenid = itc.commontokenid) as serialnumber,
+			   fcm.fcmtoken as fcmtoken,
+               t.name as teamname,
+               t.emblem,
+               t.creationdate as teamcreationdate,
+               t.teamid
+        from  instructor itc,
+              team t,
+              fcm_token fcm
+        where 1=1
+        and   itc.instructorid = t.instructorid
+        and   fcm.uid = itc.uid
+        and   itc.instructorid = #{instructorid}
+       </select>
+
+</mapper>

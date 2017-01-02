@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.scg.persistence.UserMapper">
+
+    <select id="getLevel" parameterType="int" resultType="com.scg.model.User">
+        select (
+               select sum(umi.grade +
+
+               case when umi.passflag='Y' then
+						    passgrade
+                            else
+                            0 end
+
+               )
+               from usermission umi
+               where umi.uid = u.uid
+               ) as totalscore,
+               	(
+               select t.teamid
+               from team t,
+                    teammember tm
+               where t.teamid = tm.teamid
+               and tm.uid = u.uid
+               and tm.authority='MEMBER'
+               ) as teamid,
+               u.*
+        from user u
+        where u.uid=#{param1}
+    </select>
+
+    <select id="getUserSearchList" parameterType="com.scg.model.User" resultType="com.scg.model.User">
+        select u.uid,
+       u.username,
+       u.profileimgurl,
+       u.useremail,
+       u.backimage,
+       (
+       select t.name
+       from team t,
+            teammember tm
+       where t.teamid = tm.teamid
+       and   tm.uid= u.uid
+       limit 1
+       ) teamname,
+        u.creationdate,
+        (
+        select sum(umi.grade +
+        case when umi.passflag='Y' then
+        umi.passgrade
+        else
+        0
+        end
+        )
+        from usermission umi
+        where umi.uid = u.uid
+        ) as totalscore
+      from user u
+      where uid not in (#{uid},205)
+        <if test="username != null">
+            and u.username like CONCAT('%',#{username},'%')
+        </if>
+        <if test="queryRow != 0">
+            LIMIT #{queryRow}
+        </if>
+        order by u.creationdate desc limit #{limit} offset #{offset}
+    </select>
+
+    <select id="getProfileUser" parameterType="int" resultType="com.scg.model.User">
+        select u.*,
+	   (
+       select t.name
+       from team t,
+            teammember tm
+       where t.teamid = tm.teamid
+       and   tm.uid= u.uid
+       ) teamname,
+       	   (
+       select t.teamid
+       from team t,
+            teammember tm
+       where t.teamid = tm.teamid
+       and   tm.uid= u.uid
+       ) teamid,
+       u.backimage
+       from user u
+       where u.uid = #{param1}
+    </select>
+
+
+    <insert id="saveUser" parameterType="com.scg.model.User">
+        INSERT INTO user
+        (useremail,
+        username,
+        snsid,
+        snsname,
+        snstype,
+        phone,
+        password,
+        profileimgurl,
+        googleemail,
+        location,
+        apppushflag,
+        teampushflag,
+        commontokenid,
+        wifi,
+        backimage,
+        creationdate
+        )
+        VALUES
+        (
+        #{useremail},
+        #{username},
+        #{snsid},
+        #{snsname},
+        #{snstype},
+        #{phone},
+        #{password},
+        #{profileimgurl},
+        #{googleemail},
+        #{location},
+        #{apppushflag},
+        #{teampushflag},
+        #{commontokenid},
+        #{wifi},
+        #{backimage},
+        now()
+        );
+        <selectKey keyProperty="uid" resultType="Integer" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+
+    <select id="getUser" resultType="com.scg.model.User" parameterType="com.scg.model.User">
+       select u.*,
+            (
+            select teamid
+            from teammember tm
+            where tm.uid = u.uid
+            ) as teamid
+       from user u
+       where 1=1
+        <if test="snstype != null">
+            and u.snstype = #{snstype}
+        </if>
+        <if test="snsid != null">
+            and u.snsid = #{snsid}
+        </if>
+        <if test="password != null">
+            and u.password = #{password}
+        </if>
+        <if test="useremail != null">
+            and u.useremail = #{useremail}
+        </if>
+    </select>
+
+    <select id="getUserCount" parameterType="com.scg.model.User" resultType="int">
+        select count(*)
+        from user ku
+        where 1=1
+        <if test="snstype != null">
+            and ku.snstype = #{snstype}
+        </if>
+        <if test="snsid != null">
+            and ku.snsid = #{snsid}
+        </if>
+        <if test="password != null">
+            and ku.password = #{password}
+        </if>
+        <if test="useremail != null">
+            and ku .useremail = #{useremail}
+        </if>
+    </select>
+
+    <update id="update" parameterType="com.scg.model.User">
+        update user
+        <set>
+            <if test="username != null">username = #{username},</if>
+            <if test="snsid != null">snsid = #{snsid},</if>
+            <if test="snsname != null">snsname = #{snsname},</if>
+            <if test="snstype != null">snstype = #{snstype},</if>
+            <if test="phone != null">phone = #{phone},</if>
+            <if test="password != null">password = #{password},</if>
+            <if test="profileimgurl != null">profileimgurl = #{profileimgurl},</if>
+            <if test="googleemail != null">googleemail = #{googleemail},</if>
+            <if test="location != 0">location = #{location},</if>
+            <if test="apppushflag != null">apppushflag = #{apppushflag},</if>
+            <if test="teampushflag != null">teampushflag = #{teampushflag},</if>
+            <if test="commontokenid !=  0 ">commontokenid = #{commontokenid},</if>
+            <if test="wifi !=  null ">wifi = #{wifi},</if>
+            <if test="backimage !=  null ">backimage = #{backimage},</if>
+            updatedate = now()
+        </set>
+        where 1=1
+        <if test="uid != 0">
+            and   uid = #{uid}
+        </if>
+        <if test="useremail != null">
+            and   useremail = #{useremail}
+        </if>
+    </update>
+
+    <update id="updateUser" parameterType="com.scg.model.User">
+        update user
+        <set>
+            <if test="username != null">username = #{username},</if>
+            <if test="phone != null">phone = #{phone},</if>
+            updatedate = now()
+        </set>
+        where 1=1
+        <if test="uid != 0">
+            and   uid = #{uid}
+        </if>
+        <if test="useremail != null">
+            and   useremail = #{useremail}
+        </if>
+    </update>
+
+
+    <select id="getAcctCount" resultType="int">
+        select count(*)
+        from user
+        where 1=1
+        and snstype=#{param1}
+        and useremail=#{param2}
+    </select>
+
+    <select id="getAcctCheck" resultType="int">
+        select count(*)
+        from user
+        where 1=1
+        and snstype   = #{param1}
+        and useremail = #{param2}
+    </select>
+
+    <select id="getUserList" resultType="com.scg.model.User">
+        select *
+        from user
+    </select>
+
+
+    <select id="getInsUser" parameterType="com.scg.model.User" resultType="com.scg.model.User">
+        select u.*,
+               (
+               select fcmtoken
+               from fcm_token ft
+               where ft.uid = u.uid
+               limit 1
+               )
+        from user u
+        where u.uid=#{uid}
+    </select>
+
+    <select id="webGetUser" resultType="com.scg.wep.controller.PreludebUser">
+        select useremail as username,
+               password
+        from user u
+        where u.useremail=#{param1}
+    </select>
+
+    <select id="webGetUserLogin" resultType="com.scg.wep.controller.PreludebUser">
+        select useremail as username,
+               password
+        from user u
+        where u.useremail=#{param1}
+    </select>
+
+    <select id="getRole" resultType="com.scg.wep.controller.WebRole">
+        select rolename as name
+        from user u,
+             userrole r
+        where u.uid = r.uid
+        and u.useremail=#{param1}
+    </select>
+
+
+</mapper>

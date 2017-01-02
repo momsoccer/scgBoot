@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="Description" content="Man of the Match, MOM">
+    <meta name="Keywords" content="MOM, 몸싸커, 축구교실, 축구레슨, 축구동영상, 스타트업">
+    <title>MOM, Man of the Match</title>
+    <link rel="stylesheet" type="text/css" href="css/common.css" />
+    <link rel="stylesheet" type="text/css" href="css/default.css" />
+    <link rel="stylesheet" type="text/css" href="css/motion.css" />
+    <script type="text/javascript" charset="UTF-8" src="js/jquery-2.2.3.min.js"></script>
+    <script type="text/javascript" charset="UTF-8" src="js/mobile-detect.min.js"></script>
+    <script type="text/javascript" charset="UTF-8" src="js/imagesloaded.pkgd.min.js"></script>
+    <script type="text/javascript" charset="UTF-8" src="js/common_n.js"></script>
+    <script type="text/javascript" charset="UTF-8" src="js/gnb-main.js"></script>
+    <script type="text/javascript" charset="UTF-8" src="js/common.function.js"></script>
+    <script type="text/javascript" charset="UTF-8" src="js/jquery.transit.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/gallery.css" media="screen" />
+    <script type="text/javascript" src="js/jquery.themepunch.tools.min.js"></script>
+    <script type="text/javascript" src="js/jquery.themepunch.megafoliopro.js"></script>
+</head>
+
+<body>
+<div id="skipNav">
+    <a href="#container"><span>본문 바로가기</span></a>
+</div>
+<!-- S : header -->
+<header>
+    <div class="navi">
+        <h1><a href="/">MOM싸커</a></h1>
+        <div class="gnb">
+            <ul>
+                <li><span class="line"></span><a href="company.html" class="depth1">Mom Soft 소개</a></li>
+                <li><span class="line"></span><a href="service.html" class="depth1">몸싸커앱</a></li>
+                <li><span class="line"></span><a href="gallery.html" class="depth1">갤러리</a></li>
+                <li><span class="line"></span><a href="people.html" class="depth1">사람들</a></li>
+            </ul>
+        </div>
+        <div class="navi-bg"><div class="white-bg"></div></div>
+        <a href="" class="menu-icon">전체메뉴 보기</a>
+        <div class="m-menu">
+            <div class="logo"><img src="images/common/logo_g.png" alt="MOM싸커" /></div>
+            <div class="m-menu-in">
+                <ul>
+                    <li><a href="company.html" class="depth1">Mom Soft 소개</a>
+                    </li>
+                    <li><a href="service.html" class="depth1">몸싸커앱</a>
+                    </li>
+                    <li><a href="gallery.html" class="depth1">갤러리</a>
+                    </li>
+                    <li><a href="people.html" class="depth1">사람들</a>
+                </ul>
+            </div>
+            <a href="" class="close"><img src="images/common/close.png" alt="닫기" /></a>
+        </div>
+
+    </div>
+</header>
+<!-- E : header -->
+
+<!-- S : container -->
+<div class="visual-area">
+    <div class="tit-img">
+        <h2 class="hidden">사람들</h2>
+        <p>Mom Soft와 함께하는 사람들</p>
+    </div>
+    <div class="visual-img">
+        <img src="images/common/sub_visual_04.jpg" alt="" />
+    </div>
+</div>
+<div id="container">
+    <div class="contents ">
+        <!--서브 타이틀 str-->
+        <div class="sub_title_wrap">
+            <h3 class="sub_t"><strong>M.O.M</strong>PEOPLE</h3>
+            <p class="sub_i">Mom Soft / Mom Soccer와 함께하는 사람들을 소개합니다</p>
+            <div class="sub_box"></div>
+        </div>
+        <!--//서브 타이틀 end-->
+        <!--피플 소개 str-->
+        <div class="megafolio-container">
+            <div class="mega-entry" id="mega-entry-2" data-src="images/main/inition.png" data-width="504" data-height="400">
+                <div class="mega-covercaption mega-square-bottom mega-landscape-left mega-portrait-bottom mega-transparent mega-white ">
+                    <div class="mega-title">(주)이니션<span>디자인기업</span></div>
+                    <div class="mega-job">Mom Soccer UX design</div>
+                    <p><a href="http://www.inition.kr/" target="_blank" class="link"><img src="images/common/go_link.png" alt="블로그바로가기" /></a><a href="#" class="link"><img src="images/common/go_home.png" alt="사이트바로가기" /></a></p>
+                </div>
+            </div>
+            <div class="mega-entry" id="mega-entry-1" data-src="images/main/younimag.png" data-width="504" data-height="400">
+                <div class="mega-covercaption mega-square-top mega-landscape-right mega-portrait-bottom mega-white">
+                    <div class="mega-title">윤원철<span>현)개인레슨 활동</span></div>
+                    <div class="mega-job">MomSoccer 미션모델</div>
+                    <div class="mega-job">전)부천SK,전)김해시청</div>
+                    <p></p>
+                    <p><a href="#" class="link"><img src="images/common/go_link.png" alt="블로그바로가기" /></a><a href="#" class="link"><img src="images/common/go_home.png" alt="사이트바로가기" /></a></p>
+                </div>
+            </div>
+            <div class="mega-entry" id="mega-entry-3" data-src="images/main/RDS_5640.png" data-width="504" data-height="400" >
+                <div class="mega-covercaption mega-landscape-left mega-portrait-top mega-white ">
+                    <div class="mega-title">임재훈<span>현)프리스타일 니아팀 대표,축구배울래 운영</span></div>
+                    <div class="mega-job">MomSoccer 미션모델</div>
+                    <div class="mega-job">피파온라인3 CF모델</div>
+                    <div class="mega-job">아디다스 나이트로차지 파워피치 우승</div>
+                    <p></p>
+                    <p><a href="http://www.inition.kr/" target="_blank" class="link"><img src="images/common/go_link.png" alt="블로그바로가기" /></a><a href="#" class="link"><img src="images/common/go_home.png" alt="사이트바로가기" /></a></p>
+                </div>
+            </div>
+            <div class="mega-entry" id="mega-entry-4" data-src="images/main/intro_i03.jpg" data-width="504" data-height="400">
+                <div class="mega-covercaption mega-square-top mega-landscape-left mega-portrait-bottom mega-white ">
+                    <div class="mega-title">유태풍<span>현)태풍축구교실 운영</span></div>
+                    <div class="mega-job">MomSoccer 미션모델</div>
+                    <div class="mega-job">전)독일FC퀠름,전)브라질 산토스</div>
+                    <div class="mega-job">전)양주시민구단</div>
+                    <p></p>
+                    <p><a href="http://www.taepoong-fc.com/" target="_blank" class="link"><img src="images/common/go_link.png" alt="블로그바로가기" /></a><a href="#" class="link"><img src="images/common/go_home.png" alt="사이트바로가기" /></a></p>
+                </div>
+            </div>
+        </div>
+        <!--//피플 소개 end-->
+    </div>
+</div>
+<!-- E : container -->
+<section class="link-area">
+    <div class="cont">
+        <p class="t">partnership cooperation</p>
+        <p class="i">Mom Soft와 새로운 비즈니스 기회를 만들기 원하시는 분들의 연락을 기다립니다</p>
+        <a href="mailto:ishimsungbo@gmail.com" class="mail">ishimsungbo@gmail.com phone: 010-2499-1591</a>
+        <div class="sns">11
+            <a href="#" class="fb"><img src="images/common/sns_f.png" alt="페이스북"></a>
+            <a href="#" class="bg"><img src="images/common/sns_b.png" alt="블로그"></a>
+        </div>
+    </div>
+</section>
+<a href="" class="topbt"><img src="images/common/top.png" alt="top" /></a>
+<footer>
+    <div class="footer-in">
+        Copyright(c) m.o.m All Rights Reserved.
+    </div>
+</footer>
+<script type="text/javascript">
+    jQuery(document).ready(function() {
+        var api=jQuery('.megafolio-container').megafoliopro(
+                {
+                    filterChangeAnimation:"scale",	// fade, rotate, scale, rotatescale, pagetop, pagebottom,pagemiddle
+                    filterChangeSpeed:600,					// Speed of Transition
+                    filterChangeRotate:99,					// If you ue scalerotate or rotate you can set the rotation (99 = random !!)
+                    filterChangeScale:0.6,					// Scale Animation Endparameter
+                    delay:20,								// The Time between the Animation of single mega-entry points
+                    defaultWidth:980,
+                    paddingHorizontal:20,					// Padding between the mega-entrypoints
+                    paddingVertical:20,
+                    layoutarray:[22]		// Defines the Layout Types which can be used in the Gallery. 2-9 or "random". You can define more than one, like {5,2,6,4} where the first items will be orderd in layout 5, the next comming items in layout 2, the next comming items in layout 6 etc... You can use also simple {9} then all item ordered in Layout 9 type.
+                });
+    });
+</script>
+</body>
+</html>
